@@ -70,7 +70,7 @@
 		<tr>
 			<td><%=rs.getInt("store_no")%></td>
 			<td>
-				<a href="./storeOne.jsp?storeNo=<%=rs.getInt("store_no")%>">
+				<a href="./listOne.jsp?storeNo=<%=rs.getInt("store_no")%>">
 				<%=rs.getString("store_name") %></a>
 			</td>
 			<td><%=rs.getString("store_category") %></td>
