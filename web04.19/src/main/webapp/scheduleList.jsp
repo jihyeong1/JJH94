@@ -1,7 +1,9 @@
 <%@page import="javax.print.CancelablePrintJob"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import = "java.util.*" %>
+<%@ page import = "java.sql.*" %>
+<%@ page import = "java.util.*" %> 
+<%@ page import = "vo.*" %> 
 <%
 	int targetYear = 0;
 	int targetMonth = 0;
@@ -56,6 +58,39 @@
 	// 전체 td의 개수
 	int totalTd = startBlank + lastDate + endBlank;
 	System.out.println(totalTd + "<== totalTd");
+	
+	// db data를 가져오는 알고리즘
+	Class.forName("org.mariadb.jdbc.Driver"); //드라이버 부르기
+	java.sql.Connection conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/diary","root","java1234");
+	/*
+		select schedule_no scheduleNo, 
+		day(Schedule_date) ScheduleDate
+		substr(schedule_memo 1,5) scheduleMemo, 
+		Schedule_color ScheduleColor
+		from schedule
+		where year(schedule_date) = ? and month(schedule_date) = ?
+		order by  day(schedule_date) asc; 		
+	*/
+	PreparedStatement stmt = conn.prepareStatement("select schedule_no scheduleNo, day(Schedule_date) ScheduleDate, substr(schedule_memo,1,5) scheduleMemo, Schedule_color ScheduleColor from schedule where year(schedule_date) = ? and month(schedule_date) = ? order by  day(schedule_date) asc");
+		
+		
+	stmt.setInt(1,targetYear);
+	stmt.setInt(2,targetMonth + 1);
+	System.out.println(stmt + " <--stmt");
+		
+	//출력할 공지 데이터
+	ResultSet rs = stmt.executeQuery();
+	
+	//rs를 ArrayList<Schedule>
+	ArrayList<Schedule> scheduleList = new ArrayList<Schedule>();
+		while(rs.next()){
+			Schedule s = new Schedule();
+			s.scheduleNo = rs.getInt("ScheduleNo");
+			s.scheduleDate = rs.getString("ScheduleDate"); //전체 날짜가 아닌 일 데이터만 들어있음
+			s.scheduleMemo = rs.getString("ScheduleMemo"); //전체가 아닌 5글자만 들어있음
+			s.scheduleColor = rs.getString("ScheduleColor");
+			scheduleList.add(s);
+		}
 	
 %>    
 <!DOCTYPE html>
@@ -112,7 +147,20 @@
 						}
 			%>			
 						<td style="<%=tdStyle%>">
-							<a href="./scheduleListByDate.jsp?y=<%=targetYear%>&m=<%=targetMonth%>&d=<%=num%>"><%=num%></a>
+							<div> <!-- 날짜 숫자 -->
+								<a href="./scheduleListByDate.jsp?y=<%=targetYear%>&m=<%=targetMonth%>&d=<%=num%>"><%=num%></a>
+							</div>
+							<div> <!-- 일정 memo(5글자만) -->
+								<%
+									for(Schedule s : scheduleList) {
+										if(num == Integer.parseInt(s.scheduleDate)){
+								%>
+									<div style="color: <%=s.scheduleColor%>"><%=s.scheduleMemo %></div>
+								<%			
+										}	
+									} //for닫힘
+								%>
+							</div>
 						</td>
 			<%		
 					}else{

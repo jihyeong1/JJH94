@@ -1,11 +1,11 @@
 package vo;
 
 public class Schedule {
-	public int ScheduleNo;
-	public String ScheduleDate;
-	public String ScheduleTime;
-	public String ScheduleMemo;
-	public String ScheduleColor;
+	public int scheduleNo;
+	public String scheduleDate;
+	public String scheduleTime;
+	public String scheduleMemo;
+	public String scheduleColor;
 	public String createdate;
 	public String updatedate;
 	public String SchedulePw;

@@ -1,9 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import = "java.sql.Connection" %>
-<%@ page import = "java.sql.DriverManager" %>    
-<%@ page import = "java.sql.PreparedStatement" %> 
-<%@ page import = "java.sql.ResultSet" %>     
+<%@ page import = "java.sql.*" %> 
+<%@ page import = "vo.*" %>   
 <%
 	if(request.getParameter("noticeNo") == null) {
 		response.sendRedirect("./noticeList.jsp"); // 다시 가야할 주소를 보내주는것
@@ -25,57 +23,143 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<style>
+		header{
+			width: 1280px;
+			height: 60px;
+			margin: 0 auto;
+			padding: 10px;
+		}
+		a{
+			text-decoration: none;
+			color: #000000;
+		}
+		.nav{
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			border-bottom: 2px solid #BDBDBD;
+		}
+		.center{
+			margin-left: 50%;
+		}
+		.nav div h2{
+			margin-left: 30px;
+			font-size: 40px;
+			line-height: 3px;
+		}
+		li{
+			list-style: none;
+			float: left;
+			padding: 0px 40px 20px 20px;
+			font-size: 20px;
+		}	
+		.content{
+			width: 1280px;
+			height: 600px;
+			background-color: #F6F6F6;
+			margin: 0 auto;
+			text-align: center;
+			margin-top: 50px;
+		}
+		table{
+			height: 400px; 
+		}
+		table, td{
+			width: 70%;
+			margin: 0 auto;
+			line-height: 2;
+			margin-left: 15%;
+			margin-top: 10px;
+			border: 1px solid #BDBDBD;
+			border-collapse: collapse;
+		}
+		table td.title{
+			background-color: #A6A6A6;
+			width: 300px;
+			font-weight: bold;
+			color: #FFFFFF;
+			font-size: 18px;
+		}
+	</style>
 </head>
 <body>
-	<div> <!-- 메인메뉴 -->
-		<a href="./form.jsp">홈으로</a>
-		<a href="./noticeList.jsp">공지 리스트</a>
-		<a href="./diaryList.jsp">일정 리스트</a>
-	</div>
+	<header>
+		<div class="nav"> <!-- 메인메뉴 -->
+			<div>		
+				<h2><img alt="-" src="./img/notice.png" style="width: 35px;"> Notice detail page</h2>
+			</div>
+			<div>
+				<ul>
+					<li>
+						<a href="./form.jsp">Home</a>
+					</li>
+					<li>
+						<a href="./noticeList.jsp">공지 리스트</a>
+					</li>
+					<li>
+						<a href="./scheduleList.jsp">일정 리스트</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</header>
 	
-	<h1>공지 상세</h1>
-	<%
-		if(rs.next()){
-	%>
-			<table>
-			<tr>
-				<td>notice_no</td>
-				<td><%=rs.getInt("notice_no") %></td>
-			</tr>
-			
-			<tr>
-				<td>notice_title</td>
-				<td><%=rs.getString("notice_title") %></td>
-			</tr>
-			
-			<tr>
-				<td>notice_content</td>
-				<td><%=rs.getString("notice_content") %></td>
-			</tr>
-			
-			<tr>
-				<td>notice_writer</td>
-				<td><%=rs.getString("notice_writer") %></td>
-			</tr>
-			
-			<tr>
-				<td>createdate</td>
-				<td><%=rs.getString("createdate") %></td>
-			</tr>
-			
-			<tr>
-				<td>updatedate</td>
-				<td><%=rs.getString("updatedate") %></td>
-			</tr>
-		</table>
-	<%		
-		}
-	%>
-	<div>
-		<a href="./updateNoticeForm.jsp?noticeNo=<%=noticeNo %>">수정</a>
-		<a href="./deleteNoticeForm.jsp?noticeNo=<%=noticeNo %>">삭제</a>
-	</div>
+	<div class="content">
+		<h1 style="padding-top: 30px; margin-left: 65px;">공지 상세설명</h1>
+		<%
+			//모델데이터
+			// 한가지의 값(한가지의 행)만 출력해야할 때에는 arraylist를 쓰는것보다 rs로 아래처럼 사용해주는게 좋다.
+			// 다만 arraylist로 사용해도 무방하긴하나 아래방법을 써라.
+			Notice notice = null;
+			if(rs.next()){
+				notice = new Notice();
+				notice.noticeNo = rs.getInt("notice_no");
+				notice.noticeTitle = rs.getString("notice_title");
+				notice.noticeContent = rs.getString("notice_content");
+				notice.noticeWriter = rs.getString("notice_writer");
+				notice.createdate = rs.getString("createdate");
+				notice.updatedate = rs.getString("updatedate");		
+			}
+		%>
+				<table>
+				<tr>
+					<td class="title">notice_no</td>
+					<td><%=notice.noticeNo %></td>
+				</tr>
+				
+				<tr>
+					<td class="title">notice_title</td>
+					<td><%=notice.noticeTitle%></td>
+				</tr>
+				
+				<tr>
+					<td class="title">notice_content</td>
+					<td><%=notice.noticeContent %></td>
+				</tr>
+				
+				<tr>
+					<td class="title">notice_writer</td>
+					<td><%=notice.noticeWriter %></td>
+				</tr>
+				
+				<tr>
+					<td class="title">createdate</td>
+					<td><%=notice.createdate %></td>
+				</tr>
+				
+				<tr>
+					<td class="title">updatedate</td>
+					<td><%=notice.updatedate %></td>
+				</tr>
+			</table>
+			<div style="float: right; margin-top: 40px;">
+				<a style="background-color: #A6A6A6; padding: 15px; border-radius: 10px; color: #FFFFFF; font-size: 20px; margin-right: 20px;"  href="./updateNoticeForm.jsp?noticeNo=<%=noticeNo %>">수 정</a>
+				<a style="background-color: #A6A6A6; padding: 15px; border-radius: 10px; color: #FFFFFF; font-size: 20px; margin-right: 20px;" href="./deleteNoticeForm.jsp?noticeNo=<%=noticeNo %>">삭 제</a>
+			</div>
+		</div>	
 </body>
 </html>

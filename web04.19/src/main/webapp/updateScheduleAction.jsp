@@ -1,13 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import = "java.sql.Connection" %>
-<%@ page import = "java.sql.DriverManager" %>
-<%@ page import = "java.sql.PreparedStatement" %>  
+<%@ page import = "java.sql.*" %>
 <%
 	//인코딩 하기
 	request.setCharacterEncoding("utf-8");
 
 	//유효성 겁사
+	//만약 값이 공백이거나 널값이면 updateScheduleForm에 메세지가 나오게끔 설정
 	String msg = null;
 	if(request.getParameter("scheduleDate")==null
 		|| request.getParameter("scheduleDate").equals("")){
@@ -67,10 +66,16 @@
 	//확인
 	System.out.println(row + "<== row 확인");
 	
-	int y = Integer.parseInt(request.getParameter("y"));
-	// 자바 API 에서는 12월 11 이고, 마리아DB에서는 12월이 12여서 여기에서 +1을 해줘야한다.
-	int m = Integer.parseInt(request.getParameter("m")) + 1;
-	int d = Integer.parseInt(request.getParameter("d"));
+	String y = scheduleDate.substring(0,4);	
+	// 자바 qpi로 넘어가기 위해서는 앞전에 +1을 해주었기 때문에 돌아갈때는 -1을 해줘야한다.
+	// m의 경우 -1을 해줘야하는데 문자로 되면 안되기에 integer을 사용해 숫자로 변환해주어야한다.
+	int m = Integer.parseInt(scheduleDate.substring(5,7))-1;
+	String d = scheduleDate.substring(8);
+	 //디버깅
+	 System.out.println(y + "<== y 값");
+	 System.out.println(m + "<== m 값");
+	 System.out.println(d + "<== d 값");
+	
 	if(row==0){
 		response.sendRedirect("./updateScheduleForm.jsp?noticeNo="+scheduleNo);
 	}else{

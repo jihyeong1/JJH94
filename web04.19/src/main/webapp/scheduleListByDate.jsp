@@ -1,9 +1,9 @@
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.sql.Connection" %>
-<%@ page import="java.sql.DriverManager" %>
-<%@ page import="java.sql.PreparedStatement" %> 
-<%@ page import="java.sql.ResultSet" %>    
+<%@ page import="java.sql.*" %>
+<%@ page import="vo.*" %>
+  
 <%
 	if(request.getParameter("y")== null
 	||request.getParameter("m")== null
@@ -44,6 +44,19 @@
 	PreparedStatement stmt = conn.prepareStatement(sql);
 	stmt.setString(1, scheduleDate);
 	ResultSet rs = stmt.executeQuery();
+	System.out.println(stmt + "<==scheduleListByDate param stmt");
+	
+	ArrayList<Schedule> scheduleList = new ArrayList<Schedule>();
+	while(rs.next()){
+		Schedule s = new Schedule();
+		s.ScheduleNo = rs.getInt("schedule_no");
+		s.ScheduleTime = rs.getString("schedule_time");
+		s.ScheduleMemo = rs.getString("schedule_memo");
+		s.createdate = rs.getString("createdate");
+		s.updatedate = rs.getString("updatedate");
+		scheduleList.add(s);
+	}
+	System.out.println(scheduleList.size() + "<==scheduleListByDate size");
 	
 %>    
 <!DOCTYPE html>
@@ -108,18 +121,18 @@
 			<th>삭제</th>
 		</tr>
 	<%
-		while(rs.next()){
+		for(Schedule s:scheduleList){
 	%>
 			<tr>
-				<td><%=rs.getString("schedule_time")%></td>
-				<td><%=rs.getString("schedule_memo")%></td>
-				<td><%=rs.getString("createdate")%></td>
-				<td><%=rs.getString("updatedate")%></td>
+				<td><%=s.ScheduleTime%></td>
+				<td><%=s.ScheduleMemo%></td>
+				<td><%=s.createdate%></td>
+				<td><%=s.updatedate%></td>
 				<td>
-					<a class="btn btn-dark" href="./updateScheduleForm.jsp?scheduleNo=<%=rs.getString("schedule_no")%>">수정</a>
+					<a class="btn btn-dark" href="./updateScheduleForm.jsp?scheduleNo=<%=s.ScheduleNo%>">수정</a>
 				</td>
 				<td>
-					<a class="btn btn-dark" href="./deleteScheduleForm.jsp?scheduleNo=<%=rs.getString("schedule_no")%>">삭제</a>
+					<a class="btn btn-dark" href="./deleteScheduleForm.jsp?scheduleNo=<%=s.ScheduleNo%>&y=<%=y%>&m=<%=m%>&d=<%=d%>">삭제</a>
 				</td>
 			</tr>	
 		<%		

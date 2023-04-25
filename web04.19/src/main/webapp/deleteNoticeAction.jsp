@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import = "java.sql.Connection" %>
-<%@ page import = "java.sql.DriverManager" %>
-<%@ page import = "java.sql.PreparedStatement" %>
+<%@ page import = "java.sql.*" %>
 <%
 	//요청값 유효성 검사
 	if(request.getParameter("noticeNo") == null
@@ -16,7 +14,7 @@
 	int noticeNo = Integer.parseInt(request.getParameter("noticeNo"));
 	String noticePw = request.getParameter("noticePw");
 		
-	// 디버깅 생략함 해야됨.
+	// 디버깅
 	System.out.println(noticeNo + "<-- deleteNoticeAction param noticeNo");
 	System.out.println(noticePw + "<-- deleteNoticeAction param noticePw");
 	
@@ -30,6 +28,8 @@
 	 PreparedStatement stmt = conn.prepareStatement(sql);
 	 stmt.setInt(1, noticeNo);
 	 stmt.setString(2, noticePw);
+	 
+	 //디버깅
 	 System.out.println(stmt + "<-- deleteNoticeAction sql");
 	   
 	   
@@ -40,6 +40,7 @@
 	System.out.println(row + "<-- deleteNoticeAction row");
 	
 	if(row == 0) { // 비밀번호 틀려서 삭제가 안되었을 경우
+		// 보낼때 폼페이지에서 noticeNo값을 받기때문에 여기서 보낼때 같이 보내주어야한다.
 		response.sendRedirect("./deleteNoticeForm.jsp?noticeNo="+noticeNo);
 	} else {
 		response.sendRedirect("./noticeList.jsp");

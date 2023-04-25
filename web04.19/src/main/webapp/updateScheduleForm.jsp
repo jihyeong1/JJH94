@@ -63,14 +63,9 @@
 	<form action="./updateScheduleAction.jsp" method="post">
 		<table class="table-bordered container">
 			<tr>
-				<td>schedule_No</td>
-				<td>
-					<input type="hidden" name="scheduleNo" value="<%=rs.getString("schedule_no")%>" readonly="readonly">
-				</td>
-			</tr>
-			<tr>
 				<td>schedule_date</td>
 				<td>
+					<input type="hidden" name="scheduleNo" value="<%=rs.getString("schedule_no")%>" readonly="readonly">
 					<input type="date" name="scheduleDate" value="<%=rs.getString("schedule_date")%>" readonly="readonly">
 				</td>
 			</tr>
