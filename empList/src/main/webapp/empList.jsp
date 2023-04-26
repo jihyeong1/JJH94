@@ -123,7 +123,7 @@
 	//디버깅 확인
 	System.out.println(stmt2 +"<-- stmt2 값");
 	
-	//토탈로우 설정
+	//토탈로우 설정.
 	int totalRow = 0;
 	if(rs2.next()){
 		totalRow = rs2.getInt("count(*)");
