@@ -23,7 +23,7 @@
 	
 	//첫 페이지 설정 해줬으니 디비 연결
 	Class.forName("org.mariadb.jdbc.Driver");
-	Connection conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3307/employees","root","java1234");
+	Connection conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/employees","root","java1234");
 	//sql설정하기
 	/*
 		SELECT
