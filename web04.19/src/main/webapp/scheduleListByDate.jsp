@@ -5,6 +5,9 @@
 <%@ page import="vo.*" %>
   
 <%
+	//인코딩
+	request.setCharacterEncoding("utf-8");
+
 	if(request.getParameter("y")== null
 	||request.getParameter("m")== null
 	||request.getParameter("d")== null
@@ -62,82 +65,99 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Latest compiled JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<style>
-	h1{
-		text-align: center;
-		margin-top: 20px;
-	}
-	button{
-		margin-left: 45%;
-		margin-top: 20px;
-	}
-</style>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<style>
+		table, th, td{
+			border: 1px solid #BDBDBD; 
+			background-color: #F6F6F6;
+		}
+		table{
+			border-collapse: collapse;
+			width: 1280px;
+			height: 400px;
+			margin: 0 auto;
+		}
+		table th{
+			background-color: #A6A6A6;
+			width: 300px;
+			font-weight: bold;
+			color: #FFFFFF;
+			font-size: 18px;
+		}
+		h1{
+			text-align: center;
+			margin-top: 20px;
+		}
+		button{
+			margin-left: 45%;
+			margin-top: 20px;
+		}
+	</style>
 </head>
 <body>
 	<h1>스케줄 입력</h1>
 	<form action="./insertScheduleAction.jsp" method="post">
-		<table class="table-bordered container"  >
-			<tr>
-				<th>schedule_Date</th>
-				<td><input type="date" value="<%=scheduleDate%>" name="scheduleDate" readonly="readonly"></td>
-			</tr>
-			<tr>
-				<th>schedule_Time</th>
-				<td><input type="time" name="scheduleTime"></td>
-			</tr>
-			<tr>
-				<th>schedule_Color</th>
-				<td><input type="color" name="scheduleColor" value="#000000"></td>
-			</tr>
-			<tr>
-				<th>schedule_Memo</th>
-				<td>
-					<textarea rows="5" cols="20" name="scheduleMemo"></textarea>
-				</td>
-			</tr>
-			<tr>
-				<th>schedule_pw</th>
-				<td>
-					<input type="password" name="schedulePw">
-				</td>
-			</tr>
-		</table>
-		<button type="submit" class="btn btn-dark">입력</button>
+		<div class="content1">
+			<table class="table-bordered container"  >
+				<tr>
+					<th class="title">schedule_Date</th>
+					<td><input type="date" value="<%=scheduleDate%>" name="scheduleDate" readonly="readonly"></td>
+				</tr>
+				<tr>
+					<th class="title">schedule_Time</th>
+					<td><input type="time" name="scheduleTime"></td>
+				</tr>
+				<tr>
+					<th class="title">schedule_Color</th>
+					<td><input type="color" name="scheduleColor" value="#000000"></td>
+				</tr>
+				<tr>
+					<th class="title">schedule_Memo</th>
+					<td>
+						<textarea rows="5" cols="20" name="scheduleMemo"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th class="title">schedule_pw</th>
+					<td>
+						<input type="password" name="schedulePw">
+					</td>
+				</tr>
+			</table>
+			<button type="submit" class="btn btn-dark">입력</button>
+		</div>
 	</form>
 	<h1><%=y%>년 <%=m%>월 <%=d%>일 스케줄 목록</h1>
-	<table class="table-bordered container">
-		<tr>
-			<th>schedule_time</th>
-			<th>schedule_memo</th>
-			<th>createdate</th>
-			<th>updatedate</th>
-			<th>수정</th>
-			<th>삭제</th>
-		</tr>
-	<%
-		for(Schedule s:scheduleList){
-	%>
+	<div class="content2">
+		<table class="table-bordered container">
 			<tr>
-				<td><%=s.scheduleTime%></td>
-				<td><%=s.scheduleMemo%></td>
-				<td><%=s.createdate%></td>
-				<td><%=s.updatedate%></td>
-				<td>
-					<a class="btn btn-dark" href="./updateScheduleForm.jsp?scheduleNo=<%=s.scheduleNo%>">수정</a>
-				</td>
-				<td>
-					<a class="btn btn-dark" href="./deleteScheduleForm.jsp?scheduleNo=<%=s.scheduleNo%>&y=<%=y%>&m=<%=m%>&d=<%=d%>">삭제</a>
-				</td>
-			</tr>	
-		<%		
-		}
-		%>	
-	</table>
+				<th class="title">schedule_time</th>
+				<th class="title">schedule_memo</th>
+				<th class="title">createdate</th>
+				<th class="title">updatedate</th>
+				<th class="title">수정</th>
+				<th class="title">삭제</th>
+			</tr>
+		<%
+			for(Schedule s:scheduleList){
+		%>
+				<tr>
+					<td><%=s.scheduleTime%></td>
+					<td><%=s.scheduleMemo%></td>
+					<td><%=s.createdate%></td>
+					<td><%=s.updatedate%></td>
+					<td>
+						<a class="btn btn-dark" href="./updateScheduleForm.jsp?scheduleNo=<%=s.scheduleNo%>">수정</a>
+					</td>
+					<td>
+						<a class="btn btn-dark" href="./deleteScheduleForm.jsp?scheduleNo=<%=s.scheduleNo%>&y=<%=y%>&m=<%=m%>&d=<%=d%>">삭제</a>
+					</td>
+				</tr>	
+			<%		
+			}
+			%>	
+		</table>
+	</div>
 </body>
 </html>

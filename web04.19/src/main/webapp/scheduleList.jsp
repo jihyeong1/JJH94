@@ -133,7 +133,7 @@
 		}
 		.date{
 			margin: 20px;
-			margin-left: 35%;
+			margin-left: 40%;
 		}
 		span{
 			font-size: 40px;
@@ -180,9 +180,9 @@
 	
 	<div class="wrap">
 		<div class="date">
-			<a href="./scheduleList.jsp?targetYear=<%=targetYear%>&targetMonth=<%=targetMonth-1%>" class="btn btn-secondary">이전달</a>	
+			<a href="./scheduleList.jsp?targetYear=<%=targetYear%>&targetMonth=<%=targetMonth-1%>" class="btn btn-secondary"><img alt="*" src="./img/c.next1.png" style="padding-right: 10px;"> </a>	
 			<span><%=targetYear%>년 <%=targetMonth+1%>월 </span>
-			<a href="./scheduleList.jsp?targetYear=<%=targetYear%>&targetMonth=<%=targetMonth+1%>" class="btn btn-secondary">다음달</a>
+			<a href="./scheduleList.jsp?targetYear=<%=targetYear%>&targetMonth=<%=targetMonth+1%>" class="btn btn-secondary"><img alt="*" src="./img/c.next.png"> </a>
 		</div>
 		
 		<div class="content">
