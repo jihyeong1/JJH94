@@ -3,7 +3,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import = "java.sql.*" %>
 <%@ page import = "java.util.*" %> 
-<%@ page import = "vo.*" %> 
+<%@ page import = "vo.*" %>
 <%
 	int targetYear = 0;
 	int targetMonth = 0;
@@ -99,78 +99,142 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <!-- Latest compiled and minified CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Latest compiled JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 <style>
-	table, td{
-		border:  1px solid #000000;
-	}
-	h1{
-		text-align: center;
-	}
+	header{
+			width: 1280px;
+			height: 60px;
+			margin: 0 auto;
+			padding: 10px;
+		}
+		a{
+			text-decoration: none;
+			color: #000000;
+		}
+		.nav{
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			border-bottom: 2px solid #BDBDBD;
+		}
+		.nav div h2{
+			margin-left: 30px;
+			font-size: 40px;
+			line-height: 3px;
+		}
+		li{
+			list-style: none;
+			float: left;
+			padding: 0px 40px 20px 20px;
+			font-size: 20px;
+		}
+		table, td{
+			border:  1px solid #000000;
+		}
+		.date{
+			margin: 20px;
+			margin-left: 35%;
+		}
+		span{
+			font-size: 40px;
+			font-weight: bold;
+		}
+		.wrap{
+			width: 1280px;
+			margin: 0 auto;
+			padding-top: 30px;
+		}
+		.content{
+			height: 600px;
+			margin: 0 auto;
+		}
+		table{
+			width: 1280px;
+			height: 700px;
+			border-collapse: collapse;
+			background-color: #F6F6F6;
+		}
 </style>
 </head>
 <body>
-	<div> <!-- 메인메뉴 -->
-		<a href="./form.jsp" class="btn btn-secondary">홈으로</a>
-		<a href="./noticeList.jsp" class="btn btn-secondary">공지 리스트</a>
-		<a href="./scheduleList.jsp" class="btn btn-secondary">일정 리스트</a>
-	</div>
+	<header>
+		<div class="nav"> <!-- 메인메뉴 -->
+			<div>		
+				<h2><img alt="-" src="./img/calendar.png" style="width: 35px;"> Calendar</h2>
+			</div>
+			<div>
+				<ul>
+					<li>
+						<a href="./form.jsp">Home</a>
+					</li>
+					<li>
+						<a href="./noticeList.jsp">공지 리스트</a>
+					</li>
+					<li>
+						<a href="./scheduleList.jsp">일정 리스트</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</header>
 	
-	<h1><%=targetYear%>년 <%=targetMonth+1%>월 </h1>
-	<div>
-		<a href="./scheduleList.jsp?targetYear=<%=targetYear%>&targetMonth=<%=targetMonth-1%>" class="btn btn-secondary">이전달</a>
-		<a href="./scheduleList.jsp?targetYear=<%=targetYear%>&targetMonth=<%=targetMonth+1%>" class="btn btn-secondary" style="float: right;">다음달</a>
-	</div>
-	<table style="width: 100%;" class="table-bordered">
-		<tr>
-			<%
-				for(int i=0; i<totalTd; i+=1){
-					int num = i-startBlank+1;
-					
-					if(i !=0 && i%7==0){			
-			%>
-					</tr><tr>
-			<%		
-					}
-					String tdStyle = "";
-					if(num>0 && num<=lastDate){
-						//오늘 날짜이면
-						if(today.get(Calendar.YEAR) == targetYear && 
-							today.get(Calendar.MONTH) == targetMonth
-							&& today.get(Calendar.DATE) == num){
-							tdStyle = "background-color:orange;";		
-						}else{
-							tdStyle="";			
+	<div class="wrap">
+		<div class="date">
+			<a href="./scheduleList.jsp?targetYear=<%=targetYear%>&targetMonth=<%=targetMonth-1%>" class="btn btn-secondary">이전달</a>	
+			<span><%=targetYear%>년 <%=targetMonth+1%>월 </span>
+			<a href="./scheduleList.jsp?targetYear=<%=targetYear%>&targetMonth=<%=targetMonth+1%>" class="btn btn-secondary">다음달</a>
+		</div>
+		
+		<div class="content">
+			<table>
+				<tr>
+					<%
+						for(int i=0; i<totalTd; i+=1){
+							int num = i-startBlank+1;
+							
+							if(i !=0 && i%7==0){			
+					%>
+							</tr><tr>
+					<%		
+							}
+							String tdStyle = "";
+							if(num>0 && num<=lastDate){
+								//오늘 날짜이면
+								if(today.get(Calendar.YEAR) == targetYear && 
+									today.get(Calendar.MONTH) == targetMonth
+									&& today.get(Calendar.DATE) == num){
+									tdStyle = "background-color:orange;";		
+								}else{
+									tdStyle="";			
+								}
+					%>			
+								<td style="<%=tdStyle%>">
+									<div> <!-- 날짜 숫자 -->
+										<a href="./scheduleListByDate.jsp?y=<%=targetYear%>&m=<%=targetMonth%>&d=<%=num%>"><%=num%></a>
+									</div>
+									<div> <!-- 일정 memo(5글자만) -->
+										<%
+											for(Schedule s : scheduleList) {
+												if(num == Integer.parseInt(s.scheduleDate)){
+										%>
+											<div style="color: <%=s.scheduleColor%>"><%=s.scheduleMemo %></div>
+										<%			
+												}	
+											} //for닫힘
+										%>
+									</div>
+								</td>
+					<%		
+							}else{
+					%>
+							<td>&nbsp;</td>
+					<%			
+							}
 						}
-			%>			
-						<td style="<%=tdStyle%>">
-							<div> <!-- 날짜 숫자 -->
-								<a href="./scheduleListByDate.jsp?y=<%=targetYear%>&m=<%=targetMonth%>&d=<%=num%>"><%=num%></a>
-							</div>
-							<div> <!-- 일정 memo(5글자만) -->
-								<%
-									for(Schedule s : scheduleList) {
-										if(num == Integer.parseInt(s.scheduleDate)){
-								%>
-									<div style="color: <%=s.scheduleColor%>"><%=s.scheduleMemo %></div>
-								<%			
-										}	
-									} //for닫힘
-								%>
-							</div>
-						</td>
-			<%		
-					}else{
-			%>
-					<td>&nbsp;</td>
-			<%			
-					}
-				}
-			%>
-		</tr>
-	</table>
+					%>
+				</tr>
+			</table>
+		</div>
+	</div>
 </body>
 </html>

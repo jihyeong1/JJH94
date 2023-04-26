@@ -126,7 +126,7 @@
 	<header>
 		<div class="nav"> <!-- 메인메뉴 -->
 			<div>		
-				<h2><img alt="-" src="./img/calendar.png" style="width: 35px;"> Calendar</h2>
+				<h2><img alt="-" src="./img/calendar.png" style="width: 35px;"> My Diary</h2>
 			</div>
 			<div>
 				<ul>

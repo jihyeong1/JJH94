@@ -49,9 +49,9 @@
 	ArrayList<Schedule> scheduleList = new ArrayList<Schedule>();
 	while(rs.next()){
 		Schedule s = new Schedule();
-		s.ScheduleNo = rs.getInt("schedule_no");
-		s.ScheduleTime = rs.getString("schedule_time");
-		s.ScheduleMemo = rs.getString("schedule_memo");
+		s.scheduleNo = rs.getInt("schedule_no");
+		s.scheduleTime = rs.getString("schedule_time");
+		s.scheduleMemo = rs.getString("schedule_memo");
 		s.createdate = rs.getString("createdate");
 		s.updatedate = rs.getString("updatedate");
 		scheduleList.add(s);
@@ -124,15 +124,15 @@
 		for(Schedule s:scheduleList){
 	%>
 			<tr>
-				<td><%=s.ScheduleTime%></td>
-				<td><%=s.ScheduleMemo%></td>
+				<td><%=s.scheduleTime%></td>
+				<td><%=s.scheduleMemo%></td>
 				<td><%=s.createdate%></td>
 				<td><%=s.updatedate%></td>
 				<td>
-					<a class="btn btn-dark" href="./updateScheduleForm.jsp?scheduleNo=<%=s.ScheduleNo%>">수정</a>
+					<a class="btn btn-dark" href="./updateScheduleForm.jsp?scheduleNo=<%=s.scheduleNo%>">수정</a>
 				</td>
 				<td>
-					<a class="btn btn-dark" href="./deleteScheduleForm.jsp?scheduleNo=<%=s.ScheduleNo%>&y=<%=y%>&m=<%=m%>&d=<%=d%>">삭제</a>
+					<a class="btn btn-dark" href="./deleteScheduleForm.jsp?scheduleNo=<%=s.scheduleNo%>&y=<%=y%>&m=<%=m%>&d=<%=d%>">삭제</a>
 				</td>
 			</tr>	
 		<%		
