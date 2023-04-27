@@ -7,13 +7,17 @@
 	//인코딩
 	request.setCharacterEncoding("utf-8");
 
+	//final 변수(상수)를 사용하여 가독성을 높임
+	final String RESET = "\u001B[0m"; 
+	final String YELLOW = "\u001B[43m";
+
 	//페이지 만들기
 	//현재페이지 설정
 	int currentpage = 1;
 	if(request.getParameter("currentpage") != null){
 		currentpage = Integer.parseInt(request.getParameter("currentpage"));
 	}
-	System.out.println(currentpage + "<-- 현재 currentpage");
+	System.out.println(currentpage + YELLOW+"<-- 현재 currentpage");
 	
 	//출력 할 리스트 행 갯수 설정
 	int outPutPage = 10;
@@ -26,6 +30,14 @@
 	if(request.getParameter("gender") != null){
 		gender = request.getParameter("gender");
 	}
+	System.out.println(gender + "<-- 현재 gender");
+	
+	//searchWord 요청값 구하기
+	String searchWord = "";
+	if(request.getParameter("searchWord") != null){
+		searchWord = request.getParameter("searchWord");
+	}
+	System.out.println(searchWord + "<-- 현재 searchWord");
 	
 	//첫 페이지 설정 해줬으니 디비 연결
 	Class.forName("org.mariadb.jdbc.Driver");
@@ -47,20 +59,16 @@
 	*/
 	String sql = null;
 	PreparedStatement stmt = null;
-	String col = "emp_no";
-	String aseDesc = "ASC";
 	
 	//성별검색 gender 쿼리 생성
 	if(gender.equals("")){ //젠더가 공백일 때
-		if(request.getParameter("col") != null
-			&& request.getParameter("aseDesc") != null){ // col 과 aseDesc 가 공백이 아닐 때
-			col = request.getParameter("col"); //값 불러오기
-			aseDesc = request.getParameter("aseDesc");
-			// 값이 null 이 아니니 startrow 와 outputpage 를 정렬해준다.
-			sql = "SELECT emp_no empNo, birth_date birthDate, first_name firstName, last_name lastName, gender gender, hire_date hireDate, YEAR(birth_date) byear, MONTH(birth_date) bmonth, DAY(birth_date) bday FROM employees ORDER BY "+col+" "+aseDesc+" LIMIT ?, ?";
+		if(request.getParameter("searchWord") != null){ // searchWord 가 공백이 아닐 때
+			// 값이 null 이 아니니 테이터를 정렬해준다.
+			sql = "SELECT emp_no empNo, birth_date birthDate, first_name firstName, last_name lastName, gender gender, hire_date hireDate, YEAR(birth_date) byear, MONTH(birth_date) bmonth, DAY(birth_date) bday FROM employees where CONCAT(first_name,' ',last_name) LIKE ? LIMIT ?, ?";
 			stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, startrow);
-			stmt.setInt(2, outPutPage);
+			stmt.setString(1, "%"+searchWord+"%");
+			stmt.setInt(2, startrow);
+			stmt.setInt(3, outPutPage);
 		}else{
 			// null 값이니 데이터를 조회만 한다.
 			sql = "SELECT emp_no empNo, birth_date birthDate, first_name firstName, last_name lastName, gender gender, hire_date hireDate, YEAR(birth_date) byear, MONTH(birth_date) bmonth, DAY(birth_date) bday FROM employees LIMIT ?, ?";
@@ -69,16 +77,14 @@
 			stmt.setInt(2, outPutPage);
 		}
 	}else if(gender.equals("M") || gender.equals("F")){ //성별이 선택되었을 때 설정하기
-			if(request.getParameter("col") != null // 내림 오름차순이 널값이 아닐 때 데이터를 나타내야한다.
-				|| request.getParameter("aseDesc") != null
+			if(request.getParameter("searchWord") != null
 				){
-				col = request.getParameter("col");
-				aseDesc = request.getParameter("aseDesc");
-				sql = "SELECT emp_no empNo, birth_date birthDate, first_name firstName, last_name lastName, gender gender, hire_date hireDate, YEAR(birth_date) byear, MONTH(birth_date) bmonth, DAY(birth_date) bday FROM employees where gender = ? ORDER BY "+col+" "+aseDesc+" LIMIT ?, ?";
+				sql = "SELECT emp_no empNo, birth_date birthDate, first_name firstName, last_name lastName, gender gender, hire_date hireDate, YEAR(birth_date) byear, MONTH(birth_date) bmonth, DAY(birth_date) bday FROM employees where gender = ? and CONCAT(first_name,' ',last_name) LIKE ? LIMIT ?, ?";
 				stmt = conn.prepareStatement(sql);
 				stmt.setString(1, gender);
-				stmt.setInt(2, startrow);
-				stmt.setInt(3, outPutPage);
+				stmt.setString(2, "%"+searchWord+"%");
+				stmt.setInt(3, startrow);
+				stmt.setInt(4, outPutPage);
 			}else{ //널값일때는 조회만 나오게 해야한다.
 				sql = "SELECT emp_no empNo, birth_date birthDate, first_name firstName, last_name lastName, gender gender, hire_date hireDate, YEAR(birth_date) byear, MONTH(birth_date) bmonth, DAY(birth_date) bday FROM employees where gender = ? LIMIT ?, ?";
 				stmt = conn.prepareStatement(sql);
@@ -177,50 +183,71 @@
 	<div class="content">
 		<div style="margin-bottom: 20px;">
 			<form action="./empList.jsp" method="get">
-				<select name="gender">
-					<option value="">성별선택</option>
+			<label>성별 : </label>
+			<select name="gender">
+			<%
+				if(gender.equals("")){
+			%>
+					<option value="" selected="selected">선택</option>
 					<option value="M">남</option>
 					<option value="F">여</option>
-				</select>
-				<button type="submit">성별검색</button>
-			</form>
+			<%		
+				}else if(gender.equals("M")){
+			%>
+					<option value="" >선택</option>
+					<option value="M" selected="selected">남</option>
+					<option value="F">여</option>
+			<%							
+				}else if(gender.equals("F")){
+			%>
+					<option value="">선택</option>
+					<option value="M">남</option>
+					<option value="F" selected="selected">여</option>
+			<%		
+				}
+			%>
+			</select>
+			<label>이름검색 : </label>
+			<input type="text" name="searchWord" value="<%=searchWord%>">
+			<button type="submit">조회</button>
+		</form>
 		</div>
 		<table>
 			<tr>
 				<th>
 					empNo
-					<a href="./empList.jsp?col=emp_no&aseDesc=ASC&gender=<%=gender%>">[asc]</a>
-					<a href="./empList.jsp?col=emp_no&aseDesc=DESC&gender=<%=gender%>">[desc]</a>
+<%-- 					<a href="./empList.jsp?col=emp_no&aseDesc=ASC&gender=<%=gender%>">[asc]</a>
+					<a href="./empList.jsp?col=emp_no&aseDesc=DESC&gender=<%=gender%>">[desc]</a> --%>
 				</th>
 				<th>
 					birthDate
-					<a href="./empList.jsp?col=birth_date&aseDesc=ASC&gender=<%=gender%>">[asc]</a>
-					<a href="./empList.jsp?col=birth_date&aseDesc=DESC&gender=<%=gender%>">[desc]</a>
+					<%-- <a href="./empList.jsp?col=birth_date&aseDesc=ASC&gender=<%=gender%>">[asc]</a>
+					<a href="./empList.jsp?col=birth_date&aseDesc=DESC&gender=<%=gender%>">[desc]</a> --%>
 				</th>
 				<th>
 					age
-					<a href="./empList.jsp?col=birth_date&aseDesc=DESC&gender=<%=gender%>">[asc]</a>
-					<a href="./empList.jsp?col=birth_date&aseDesc=ASC&gender=<%=gender%>">[desc]</a>
+					<%-- <a href="./empList.jsp?col=birth_date&aseDesc=DESC&gender=<%=gender%>">[asc]</a>
+					<a href="./empList.jsp?col=birth_date&aseDesc=ASC&gender=<%=gender%>">[desc]</a> --%>
 				</th>
 				<th>
 					firstName
-					<a href="./empList.jsp?col=first_name&aseDesc=ASC&gender=<%=gender%>">[asc]</a>
-					<a href="./empList.jsp?col=first_name&aseDesc=DESC&gender=<%=gender%>">[desc]</a>
+					<%-- <a href="./empList.jsp?col=first_name&aseDesc=ASC&gender=<%=gender%>">[asc]</a>
+					<a href="./empList.jsp?col=first_name&aseDesc=DESC&gender=<%=gender%>">[desc]</a> --%>
 				</th>
 				<th>
 					lastName
-					<a href="./empList.jsp?col=last_name&aseDesc=ASC&gender=<%=gender%>">[asc]</a>
-					<a href="./empList.jsp?col=last_name&aseDesc=DESC&gender=<%=gender%>">[desc]</a>
+					<%-- <a href="./empList.jsp?col=last_name&aseDesc=ASC&gender=<%=gender%>">[asc]</a>
+					<a href="./empList.jsp?col=last_name&aseDesc=DESC&gender=<%=gender%>">[desc]</a> --%>
 				</th>
 				<th>
 					gender
-					<a href="./empList.jsp?col=gender&aseDesc=ASC&gender=<%=gender%>">[asc]</a>
-					<a href="./empList.jsp?col=gender&aseDesc=DESC&gender=<%=gender%>">[desc]</a>
+					<%-- <a href="./empList.jsp?col=gender&aseDesc=ASC&gender=<%=gender%>">[asc]</a>
+					<a href="./empList.jsp?col=gender&aseDesc=DESC&gender=<%=gender%>">[desc]</a> --%>
 				</th>
 				<th>
 					hireDate
-					<a href="./empList.jsp?col=hire_date&aseDesc=ASC&gender=<%=gender%>">[asc]</a>
-					<a href="./empList.jsp?col=hire_date&aseDesc=DESC&gender=<%=gender%>">[desc]</a>
+					<%-- <a href="./empList.jsp?col=hire_date&aseDesc=ASC&gender=<%=gender%>">[asc]</a>
+					<a href="./empList.jsp?col=hire_date&aseDesc=DESC&gender=<%=gender%>">[desc]</a> --%>
 				</th>
 			</tr>
 			<%
@@ -257,13 +284,13 @@
 		<%
 				if(currentpage > 1){
 			%>
-					<a href="./empList.jsp?currentpage=<%=currentpage-1%>&col=<%=col%>&aseDesc=<%=aseDesc%>&gender=<%=gender%>"style="float: left; padding-left: 10px;"><img alt="+" src="./img/next1.png"></a>
+					<a href="./empList.jsp?currentpage=<%=currentpage-1%>&gender=<%=gender%>&searchWord=<%=searchWord%>"style="float: left; padding-left: 10px;"><img alt="+" src="./img/next1.png"></a>
 			<%		
 				}
 				if(currentpage < lastPage){
 			%>
 					<div style="margin-top: 30px; font-size: 25px; text-align: center;" ><%=currentpage %> 페이지	
-					<a href="./empList.jsp?currentpage=<%=currentpage+1%>&col=<%=col%>&aseDesc=<%=aseDesc%>&gender=<%=gender%>"style="float: right; padding-right: 10px;"><img alt="+" src="./img/next.png"></a></div>
+					<a href="./empList.jsp?currentpage=<%=currentpage+1%>&gender=<%=gender%>&searchWord=<%=searchWord%>"style="float: right; padding-right: 10px;"><img alt="+" src="./img/next.png"></a></div>
 			<%		
 				}
 			%>
