@@ -93,13 +93,29 @@
 			margin-left: 45%;
 			margin-top: 20px;
 		}
+		.content1{
+			width: 700px;
+			margin: 0 auto;
+		}
+		.content1 th{
+			width: 30%;
+		}
+		.content1 input, textarea{
+			margin-left: 10px;
+		}
+		.content2{
+			text-align: center;
+		}
+		.content2 th{
+			height: 45px;
+		}
 	</style>
 </head>
 <body>
 	<h1>스케줄 입력</h1>
 	<form action="./insertScheduleAction.jsp" method="post">
 		<div class="content1">
-			<table class="table-bordered container"  >
+			<table class="content1">
 				<tr>
 					<th class="title">schedule_Date</th>
 					<td><input type="date" value="<%=scheduleDate%>" name="scheduleDate" readonly="readonly"></td>
@@ -115,7 +131,7 @@
 				<tr>
 					<th class="title">schedule_Memo</th>
 					<td>
-						<textarea rows="5" cols="20" name="scheduleMemo"></textarea>
+						<textarea rows="10" cols="50" name="scheduleMemo"></textarea>
 					</td>
 				</tr>
 				<tr>
@@ -130,7 +146,7 @@
 	</form>
 	<h1><%=y%>년 <%=m%>월 <%=d%>일 스케줄 목록</h1>
 	<div class="content2">
-		<table class="table-bordered container">
+		<table class="content2">
 			<tr>
 				<th class="title">schedule_time</th>
 				<th class="title">schedule_memo</th>
