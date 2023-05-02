@@ -8,5 +8,6 @@
 </head>
 <body>
 	ex2.jsp session id: <%=session.getId()%>
+	<a href="./logout.jsp">로그아웃</a>
 </body>
 </html>

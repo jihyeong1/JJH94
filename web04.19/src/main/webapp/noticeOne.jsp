@@ -59,7 +59,7 @@
 		}	
 		.content{
 			width: 1280px;
-			height: 600px;
+			height: 650px;
 			background-color: #F6F6F6;
 			margin: 0 auto;
 			text-align: center;

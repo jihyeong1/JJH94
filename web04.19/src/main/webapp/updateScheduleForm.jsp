@@ -44,10 +44,13 @@
 		margin-left: 45%;
 		margin-top: 20px;
 	}
+	.content{
+		background-color: #F6F6F6;
+	}
 </style>	
 </head>
 <body>
-	<h1>스케줄 수정</h1>
+	<h1><img alt="-" src="./img/calendar.png" style="width: 35px;"> 스케줄 수정</h1>
 	<div>
 		<%
 			if(request.getParameter("msg") != null) {
@@ -61,47 +64,49 @@
 		if(rs.next()){
 	%>
 	<form action="./updateScheduleAction.jsp" method="post">
-		<table class="table-bordered container">
-			<tr>
-				<td>schedule_date</td>
-				<td>
-					<input type="hidden" name="scheduleNo" value="<%=rs.getString("schedule_no")%>" readonly="readonly">
-					<input type="date" name="scheduleDate" value="<%=rs.getString("schedule_date")%>" readonly="readonly">
-				</td>
-			</tr>
-			<tr>
-				<td>schedule_time</td>
-				<td>
-					<input type="time" name="scheduleTime" value="<%=rs.getString("schedule_time")%>">
-				</td>
-			</tr>
-			<tr>
-				<td>schedule_memo</td>
-				<td>
-					<textarea rows="10" cols="50" name="scheduleMemo"><%=rs.getString("schedule_memo")%>
-					</textarea>
-				</td>
-			</tr>
-			<tr>
-				<td>schedule_color</td>
-				<td>
-					<input type="color" name="scheduleColor" value="<%=rs.getString("schedule_color")%>">
-				</td>
-			</tr>
-			<tr>
-				<td>createdate</td>
-				<td><%=rs.getString("createdate") %></td>
-			</tr>
-			<tr>
-				<td>updatedate</td>
-				<td><%=rs.getString("updatedate") %></td>
-			</tr>
-			<tr>
-				<td>schedule_pw</td>
-				<td><input type="password" name="schedulePw"></td>
-			</tr>
-		</table>
-		<button type="submit" class="btn btn-dark">수정</button>	
+		<div class="content">
+			<table class="table-bordered container">
+				<tr>
+					<td>schedule_date</td>
+					<td>
+						<input type="hidden" name="scheduleNo" value="<%=rs.getString("schedule_no")%>" readonly="readonly">
+						<input type="date" name="scheduleDate" value="<%=rs.getString("schedule_date")%>" readonly="readonly">
+					</td>
+				</tr>
+				<tr>
+					<td>schedule_time</td>
+					<td>
+						<input type="time" name="scheduleTime" value="<%=rs.getString("schedule_time")%>">
+					</td>
+				</tr>
+				<tr>
+					<td>schedule_memo</td>
+					<td>
+						<textarea rows="10" cols="50" name="scheduleMemo"><%=rs.getString("schedule_memo")%>
+						</textarea>
+					</td>
+				</tr>
+				<tr>
+					<td>schedule_color</td>
+					<td>
+						<input type="color" name="scheduleColor" value="<%=rs.getString("schedule_color")%>">
+					</td>
+				</tr>
+				<tr>
+					<td>createdate</td>
+					<td><%=rs.getString("createdate") %></td>
+				</tr>
+				<tr>
+					<td>updatedate</td>
+					<td><%=rs.getString("updatedate") %></td>
+				</tr>
+				<tr>
+					<td>schedule_pw</td>
+					<td><input type="password" name="schedulePw"></td>
+				</tr>
+			</table>
+			<button type="submit" class="btn btn-dark">수정</button>
+		</div>	
 	</form>
 	<%		
 		}

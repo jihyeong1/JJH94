@@ -85,6 +85,10 @@
 			color: #FFFFFF;
 			font-size: 18px;
 		}
+		a{
+			text-decoration: none;
+			color: #000000;
+		}
 		h1{
 			text-align: center;
 			margin-top: 20px;
@@ -112,7 +116,7 @@
 	</style>
 </head>
 <body>
-	<h1>스케줄 입력</h1>
+	<h1><img alt="-" src="./img/calendar.png" style="width: 35px;"> 스케줄 입력</h1>
 	<form action="./insertScheduleAction.jsp" method="post">
 		<div class="content1">
 			<table class="content1">
@@ -144,7 +148,7 @@
 			<button type="submit" class="btn btn-dark">입력</button>
 		</div>
 	</form>
-	<h1><%=y%>년 <%=m%>월 <%=d%>일 스케줄 목록</h1>
+	<h1><img alt="-" src="./img/calendar.png" style="width: 35px;"> <%=y%>년 <%=m%>월 <%=d%>일 스케줄 목록</h1>
 	<div class="content2">
 		<table class="content2">
 			<tr>
