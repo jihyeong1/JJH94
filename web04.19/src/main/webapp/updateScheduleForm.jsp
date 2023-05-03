@@ -51,7 +51,7 @@
 	table td{
 		height: 45px; 
 	}
-	table th{
+	table th{ 
 		background-color: #A6A6A6;
 		width: 200px;
 		font-weight: bold;
