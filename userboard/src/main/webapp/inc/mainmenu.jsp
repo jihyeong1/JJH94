@@ -1,8 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<style>
+	.mainmenu li{
+			float: right;
+			font-size: 20px;
+			border: 1px solid #BDBDBD;
+			background-color: #FFFFFF;
+			margin-left: 20px;
+			padding: 10px;
+			border-radius: 10px;
+			position: relative;
+		}
+</style>    
+   
 <div>
 	<ul>
-		<li>
+		<li class="mainmenu">
 			<a href="<%=request.getContextPath()%>/home.jsp">홈으로</a>
 		</li>
 		<!-- 로그인전 : 회원가입

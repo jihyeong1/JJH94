@@ -5,4 +5,5 @@ public class Member {
 	public String memberPw;
 	public String createdate;
 	public String updatedate;
+
 }
