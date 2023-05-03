@@ -59,7 +59,7 @@
 		font-size: 18px;
 		text-align: center;
 	}
-	input, textarea {
+	input, textarea { 
 		margin-left: 10px;
 	}	
 </style>	
