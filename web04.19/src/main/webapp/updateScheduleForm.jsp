@@ -41,12 +41,27 @@
 		margin-top: 20px;
 	}
 	button{
-		margin-left: 45%;
+		margin-left: 50%;
 		margin-top: 20px;
 	}
-	.content{
+	.content table{
 		background-color: #F6F6F6;
+		width: 800px;
 	}
+	table td{
+		height: 45px;
+	}
+	table th{
+		background-color: #A6A6A6;
+		width: 200px;
+		font-weight: bold;
+		color: #FFFFFF;
+		font-size: 18px;
+		text-align: center;
+	}
+	input, textarea {
+		margin-left: 10px;
+	}	
 </style>	
 </head>
 <body>
@@ -67,41 +82,41 @@
 		<div class="content">
 			<table class="table-bordered container">
 				<tr>
-					<td>schedule_date</td>
+					<th>schedule_date</th>
 					<td>
 						<input type="hidden" name="scheduleNo" value="<%=rs.getString("schedule_no")%>" readonly="readonly">
 						<input type="date" name="scheduleDate" value="<%=rs.getString("schedule_date")%>" readonly="readonly">
 					</td>
 				</tr>
 				<tr>
-					<td>schedule_time</td>
+					<th>schedule_time</th>
 					<td>
 						<input type="time" name="scheduleTime" value="<%=rs.getString("schedule_time")%>">
 					</td>
 				</tr>
 				<tr>
-					<td>schedule_memo</td>
+					<th>schedule_memo</th>
 					<td>
 						<textarea rows="10" cols="50" name="scheduleMemo"><%=rs.getString("schedule_memo")%>
 						</textarea>
 					</td>
 				</tr>
 				<tr>
-					<td>schedule_color</td>
+					<th>schedule_color</th>
 					<td>
 						<input type="color" name="scheduleColor" value="<%=rs.getString("schedule_color")%>">
 					</td>
 				</tr>
 				<tr>
-					<td>createdate</td>
-					<td><%=rs.getString("createdate") %></td>
+					<th>createdate</th>
+					<td style="padding-left: 10px;"><%=rs.getString("createdate") %></td>
 				</tr>
 				<tr>
-					<td>updatedate</td>
-					<td><%=rs.getString("updatedate") %></td>
+					<th>updatedate</th>
+					<td style="padding-left: 10px;"><%=rs.getString("updatedate") %></td>
 				</tr>
 				<tr>
-					<td>schedule_pw</td>
+					<th>schedule_pw</th>
 					<td><input type="password" name="schedulePw"></td>
 				</tr>
 			</table>
