@@ -49,7 +49,7 @@
 		width: 800px;
 	}
 	table td{
-		height: 45px;
+		height: 45px; 
 	}
 	table th{
 		background-color: #A6A6A6;
