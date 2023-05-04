@@ -2,7 +2,122 @@
     pageEncoding="UTF-8"%>
 <%@ page import = "java.sql.*" %>  
 <%@ page import = "java.util.*" %>
-<%@ page import = "vo.*" %>      
+<%@ page import = "vo.*" %>  
+ <%
+	// 요청분석(컨트롤러 계층)
+	// 1.세션 session JSP내장(기본)객체
+	// 2. request / response
+	int currentPage = 1;
+ 	if(request.getParameter("currentPage") != null){
+ 		currentPage = Integer.parseInt(request.getParameter("currentPage"));
+ 	}
+ 	System.out.println(currentPage + "<--currentPage값");
+ 	
+ 	//출력 행 설정
+ 	int rowPerPage = 10;
+ 	int startRow = (currentPage - 1) * rowPerPage;
+ 	
+ 	int totalRow = 0;
+ 	
+ 	//localName의 초기화설정
+	String localName = "전체"; //기본값을 "전체"로 설정
+	if(request.getParameter("localName") != null){ //전체값이 들어오지않았을 때
+		localName = request.getParameter("localName"); //localName에 값 저장
+	}
+	System.out.println(localName + "<--localName");
+	
+	// 모델 계층
+	String driver = "org.mariadb.jdbc.Driver";
+	String dbUrl = "jdbc:mariadb://127.0.0.1:3306/userboard";
+	String dbUser = "root";
+	String dbPw = "java1234";
+	Class.forName(driver);
+	Connection conn = null;
+	PreparedStatement subMenuStmt = null;
+	ResultSet subMenuRs = null;
+	conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
+	
+	//subMenuList 쿼리문 만들기
+	/* SELECT '전체' localName,COUNT(local_name) cnt FROM board
+	UNION all
+	SELECT local_name, COUNT(local_name) FROM board group BY local_name; */
+	String subMenuSql = "SELECT '전체' localName,COUNT(local_name) cnt FROM board UNION all SELECT local_name, COUNT(local_name) FROM board group BY local_name";
+	subMenuStmt = conn.prepareStatement(subMenuSql);
+	subMenuRs = subMenuStmt.executeQuery();
+	
+	//subMenuList <-- 모델데이터
+	ArrayList<HashMap<String, Object>> subMenuList = new ArrayList<HashMap<String, Object>>();
+	while(subMenuRs.next()){
+		HashMap<String, Object> m = new HashMap<String, Object>();
+		m.put("localName", subMenuRs.getString("localName"));
+		m.put("cnt", subMenuRs.getInt("cnt"));
+		subMenuList.add(m);					
+	}
+	
+	//subMenuBoard 쿼리문 만들기
+	/* SELECT local_name, board_title, SUBSTRING(board_content, 1, 11) FROM board; */
+	PreparedStatement subMenuBoardStmt = null;
+	ResultSet subMenuBoardRs = null;
+	String subMenuBoard = "SELECT board_no boardNo, local_name localName, board_title boardTitle, SUBSTRING(board_content, 1, 11) boardContent, createdate FROM board";
+	String subMenuAddSql = " WHERE local_name = ?";
+	if(!localName.equals("전체")){
+		subMenuBoard += subMenuAddSql + " LIMIT ?, ?"; //전체 값이 설정되지않았을 때 sql문 합치기
+		subMenuBoardStmt = conn.prepareStatement(subMenuBoard);
+		subMenuBoardStmt.setString(1, localName);
+		subMenuBoardStmt.setInt(2, startRow);
+		subMenuBoardStmt.setInt(3, rowPerPage);
+	} else {
+		subMenuBoard += " LIMIT ?, ?";
+		subMenuBoardStmt = conn.prepareStatement(subMenuBoard);
+		subMenuBoardStmt.setInt(1, startRow);
+		subMenuBoardStmt.setInt(2, rowPerPage);
+	}		
+	
+	subMenuBoardRs = subMenuBoardStmt.executeQuery(); //DB쿼리 결과셋 모델
+	
+	//디버깅
+	System.out.println(subMenuBoardStmt + "<-- subMenuBoardStmt");
+	
+	//subMenuBoard <-- 모델데이터
+	ArrayList<SubList> subList = new ArrayList<SubList>();
+	while(subMenuBoardRs.next()){
+		SubList s = new SubList();
+		s.boardNo = subMenuBoardRs.getInt("boardNo");
+		s.localName = subMenuBoardRs.getString("localName");
+		s.boardTitle = subMenuBoardRs.getString("boardTitle");
+		s.boardContent = subMenuBoardRs.getString("boardContent");
+		s.createdate = subMenuBoardRs.getString("createdate");
+		subList.add(s);
+	}
+	
+	//pageCnt 쿼리문
+	PreparedStatement pageCntstmt = null;
+	ResultSet pageCntRs = null;
+	String pageCntsql = "";
+	String pageCntAddsql = "";
+	pageCntsql = "SELECT local_name, count(*) from board";
+	pageCntAddsql = " WHERE local_name = ?";
+	//if문으로 분기
+	if(localName.equals("전체")
+		|| localName == null || localName.equals("")){
+		pageCntstmt = conn.prepareStatement(pageCntsql);
+	}else{
+		pageCntsql += pageCntAddsql;
+		pageCntstmt = conn.prepareStatement(pageCntsql);
+		pageCntstmt.setString(1, localName);
+	}
+	pageCntRs = pageCntstmt.executeQuery();
+	
+	System.out.println(pageCntstmt + "<--pageCntstmt");
+	
+	if(pageCntRs.next()){
+		totalRow = pageCntRs.getInt("count(*)");
+	}
+	int lastPage = totalRow / rowPerPage;
+	if(totalRow % rowPerPage != 0){
+		lastPage = lastPage + 1;
+	}
+%> 
 <!DOCTYPE html>
 <html>
 <head>
@@ -69,71 +184,6 @@
 </head>
 <body>
 <div class="wrap">
-	<%
-		//localName의 초기화설정
-		String localName = "전체"; //기본값을 "전체"로 설정
-		if(request.getParameter("localName") != null){ //전체값이 들어오지않았을 때
-			localName = request.getParameter("localName"); //localName에 값 저장
-		}
-		System.out.println(localName + "<--localName");
-	 
-		String driver = "org.mariadb.jdbc.Driver";
-		String dbUrl = "jdbc:mariadb://127.0.0.1:3306/userboard";
-		String dbUser = "root";
-		String dbPw = "java1234";
-		Class.forName(driver);
-		Connection conn = null;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
-		
-		//쿼리문 만들기
-		/* SELECT '전체' localName,COUNT(local_name) cnt FROM board
-		UNION all
-		SELECT local_name, COUNT(local_name) FROM board group BY local_name; */
-		String subMenuSql = "SELECT '전체' localName,COUNT(local_name) cnt FROM board UNION all SELECT local_name, COUNT(local_name) FROM board group BY local_name";
-		PreparedStatement subMenuStmt = conn.prepareStatement(subMenuSql);
-		ResultSet subMenuRs = subMenuStmt.executeQuery();
-		
-		//subMenuList <-- 모델데이터
-		ArrayList<HashMap<String, Object>> subMenuList = new ArrayList<HashMap<String, Object>>();
-		while(subMenuRs.next()){
-			HashMap<String, Object> m = new HashMap<String, Object>();
-			m.put("localName", subMenuRs.getString("localName"));
-			m.put("cnt", subMenuRs.getInt("cnt"));
-			subMenuList.add(m);					
-		}
-		
-		/* SELECT local_name, board_title, SUBSTRING(board_content, 1, 11) FROM board; */
-		String subMenuBoard = "SELECT local_name localName, board_title boardTitle, SUBSTRING(board_content, 1, 11) boardContent FROM board";
-		String subMenuAddSql = " WHERE local_name = ?";
-		PreparedStatement subMenuBoardStmt = null;
-		if(!localName.equals("전체")){
-			subMenuBoard += subMenuAddSql; //전체 값이 설정되지않았을 때 sql문 합치기
-			subMenuBoardStmt = conn.prepareStatement(subMenuBoard);
-			subMenuBoardStmt.setString(1, localName);
-		} else {
-			subMenuBoardStmt = conn.prepareStatement(subMenuBoard);
-		}		
-		
-		ResultSet subMenuBoardRs = subMenuBoardStmt.executeQuery();
-		
-		//디버깅
-		System.out.println(subMenuBoardStmt + "<-- subMenuBoardStmt");
-		
-		//subMenuBoard <-- 모델데이터
-		ArrayList<SubList> subList = new ArrayList<SubList>();
-		while(subMenuBoardRs.next()){
-			SubList s = new SubList();
-			s.localName = subMenuBoardRs.getString("localName");
-			s.boardTitle = subMenuBoardRs.getString("boardTitle");
-			s.boardContent = subMenuBoardRs.getString("boardContent");
-			subList.add(s);
-		}
-		
-		
-		
-	%>
 	<!-- 메인 메뉴(가로) -->
 	<div class="mainmenu">
 		<jsp:include page="/inc/mainmenu.jsp"></jsp:include>
@@ -197,19 +247,42 @@
 				<th>localName</th>
 				<th>boardTitle</th>
 				<th>boardContent</th>
+				<th>createdate</th>
 			</tr>
 			<%
 				for(SubList s : subList){
 			%>
 					<tr>
 						<td><%=s.localName %></td>
-						<td><%=s.boardTitle %></td>
+						<td>
+							<a href="<%=request.getContextPath()%>/board/boardOne.jsp?boardNo=<%=s.boardNo%>">
+								<%=s.boardTitle %>
+							</a>
+						</td>
 						<td><%=s.boardContent.substring(1, 11) %></td>
+						<td><%=s.createdate %></td>
 					</tr>
 			<%		
 				}
 			%>
 		</table>	
+	</div>
+	<!-- 페이징 설정 -->
+	<div>
+		<%
+			if(currentPage > 1){
+		%>
+				<a href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=currentPage - 1%>&localName=<%=localName%>">이전</a>
+		<%		
+			}
+		%>
+		<%
+			if(currentPage < lastPage){
+		%>
+				<a href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=currentPage + 1%>&localName=<%=localName%>">다음</a>
+		<%		
+			}
+		%>
 	</div>
 	
 	<div>

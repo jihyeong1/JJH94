@@ -6,6 +6,7 @@ public class SubList {
 	public String boardTitle;
 	public String boardContent;
 	public String boardId;
+	public String memberId;
 	public String createdate;
 	public String updatedate;	
 }
