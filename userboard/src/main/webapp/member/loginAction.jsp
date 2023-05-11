@@ -20,8 +20,8 @@
 	System.out.println(memberPw + "<-- memberaPw");
 	
 	Member paramMember = new Member();
-	paramMember.memberId = memberId;
-	paramMember.memberPw = memberPw;
+	paramMember.setMemberId(memberId);
+	paramMember. setMemberPw(memberPw);
 	
 	String driver = "org.mariadb.jdbc.Driver";
 	String dbUrl = "jdbc:mariadb://127.0.0.1:3306/userboard";
@@ -35,8 +35,8 @@
 	
 	String sql = "SELECT member_id memberId from member where member_id = ? and member_pw = password(?)";
 	stmt= conn.prepareStatement(sql);
-	stmt.setString(1, paramMember.memberId);
-	stmt.setString(2, paramMember.memberPw);
+	stmt.setString(1, paramMember.getMemberId());
+	stmt.setString(2, paramMember.getMemberPw());
 	System.out.println(stmt + "<-- stmt ");
 	rs = stmt.executeQuery();
 	if(rs.next()){ //로그인 성공

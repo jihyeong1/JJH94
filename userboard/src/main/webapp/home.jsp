@@ -82,11 +82,11 @@
 	ArrayList<SubList> subList = new ArrayList<SubList>();
 	while(subMenuBoardRs.next()){
 		SubList s = new SubList();
-		s.boardNo = subMenuBoardRs.getInt("boardNo");
-		s.localName = subMenuBoardRs.getString("localName");
-		s.boardTitle = subMenuBoardRs.getString("boardTitle");
-		s.boardContent = subMenuBoardRs.getString("boardContent");
-		s.createdate = subMenuBoardRs.getString("createdate");
+		s.setBoardNo(subMenuBoardRs.getInt("boardNo"));
+		s.setLocalName(subMenuBoardRs.getString("localName"));
+		s.setBoardTitle(subMenuBoardRs.getString("boardTitle"));
+		s.setBoardContent(subMenuBoardRs.getString("boardContent"));
+		s.setCreatedate(subMenuBoardRs.getString("createdate"));
 		subList.add(s);
 	}
 	
@@ -180,6 +180,13 @@
 		.sublist table th{
 			background-color: #FFFFFF;
 		}
+		.cate{
+			background-color: gray;
+			padding: 5px;
+			border-radius: 10px;
+			margin-left: 28px;
+			font-size: 15px;
+		}
 	</style>
 </head>
 <body>
@@ -205,7 +212,8 @@
 				<%
 					}
 				%>
-		</ul>
+			</ul>
+			<a href="<%=request.getContextPath()%>/member/categoryForm.jsp" class="cate">카테고리 관리</a>
 		</div>
 		<div>
 			<img alt="d" src="./img/trip.jpg" style="width:700px; height: 550px; margin-top: 5px;">
@@ -253,14 +261,14 @@
 				for(SubList s : subList){
 			%>
 					<tr>
-						<td><%=s.localName %></td>
+						<td><%=s.getLocalName() %></td>
 						<td>
-							<a href="<%=request.getContextPath()%>/board/boardOne.jsp?boardNo=<%=s.boardNo%>">
-								<%=s.boardTitle %>
+							<a href="<%=request.getContextPath()%>/board/boardOne.jsp?boardNo=<%=s.getBoardNo()%>">
+								<%=s.getBoardTitle() %>
 							</a>
 						</td>
-						<td><%=s.boardContent.substring(1, 11) %></td>
-						<td><%=s.createdate %></td>
+						<td><%=s.getBoardContent().substring(1, 11) %></td>
+						<td><%=s.getCreatedate() %></td>
 					</tr>
 			<%		
 				}

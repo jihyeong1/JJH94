@@ -31,7 +31,7 @@
 			}else{
 		%>
 				<li>
-					<a href="<%=request.getContextPath()%>">회원정보</a>
+					<a href="<%=request.getContextPath()%>/member/profileForm.jsp">회원정보</a>
 				</li>
 				<li>
 					<a href="<%=request.getContextPath()%>/member/logoutAction.jsp">로그아웃</a>

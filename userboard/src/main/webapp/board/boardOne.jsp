@@ -54,13 +54,13 @@
 	SubList subList = null;
 	if(boardDetailRs.next()){
 		subList = new SubList();
-		subList.boardNo = boardDetailRs.getInt("boardNo"); 
-		subList.localName = boardDetailRs.getString("localName"); 
-		subList.boardTitle = boardDetailRs.getString("boardTitle"); 
-		subList.boardContent = boardDetailRs.getString("boardContent"); 
-		subList.memberId = boardDetailRs.getString("memberId"); 
-		subList.createdate = boardDetailRs.getString("createdate"); 
-		subList.updatedate = boardDetailRs.getString("updatedate"); 
+		subList.setBoardNo(boardDetailRs.getInt("boardNo")); 
+		subList.setLocalName(boardDetailRs.getString("localName")); 
+		subList.setBoardTitle(boardDetailRs.getString("boardTitle")); 
+		subList.setBoardContent(boardDetailRs.getString("boardContent")); 
+		subList.setMemberId(boardDetailRs.getString("memberId")); 
+		subList.setCreatedate(boardDetailRs.getString("createdate")); 
+		subList.setUpdatedate(boardDetailRs.getString("updatedate")); 
 	}
 	
 	//comment list 결과셋
@@ -83,12 +83,12 @@
 	ArrayList<Comment> commentList = new ArrayList<Comment>();
 	while(commentListRs.next()){
 		Comment c = new Comment(); 
-		c.commentNo = commentListRs.getInt("commentNo");
-		c.boardNo = commentListRs.getInt("boardNo");
-		c.commentContent = commentListRs.getString("commentContent");
-		c.memberId = commentListRs.getString("memberId");
-		c.createdate = commentListRs.getString("createdate");
-		c.updatedate = commentListRs.getString("updatedate");
+		c.setCommentNo(commentListRs.getInt("commentNo"));
+		c.setBoardNo(commentListRs.getInt("boardNo"));
+		c.setCommentContent(commentListRs.getString("commentContent"));
+		c.setMemberId(commentListRs.getString("memberId"));
+		c.setCreatedate(commentListRs.getString("createdate"));
+		c.setUpdatedate(commentListRs.getString("updatedate"));
 		commentList.add(c);
 	}
 	
@@ -156,36 +156,36 @@
 	<table>
 			<tr>
 				<td class="title">boardNo</td>
-				<td><%=subList.boardNo %></td>
+				<td><%=subList.getBoardNo() %></td>
 			</tr>
 			
 			<tr>
 				<td class="title">localName</td>
-				<td><%=subList.localName%></td>
+				<td><%=subList.getLocalName()%></td>
 			</tr>
 			
 			<tr>
 				<td class="title">boardTitle</td>
-				<td><%=subList.boardTitle %></td>
+				<td><%=subList.getBoardTitle() %></td>
 			</tr>
 			
 			<tr>
 				<td class="title">boardContent</td>
-				<td><%=subList.boardContent %></td>
+				<td><%=subList.getBoardContent() %></td>
 			</tr>
 			
 			<tr>
 				<td class="title">memberId</td>
-				<td><%=subList.memberId%></td>
+				<td><%=subList.getMemberId()%></td>
 			</tr>
 			
 			<tr>
 				<td class="title">createdate</td>
-				<td><%=subList.createdate %></td>
+				<td><%=subList.getCreatedate() %></td>
 			</tr>
 			<tr>
 				<td class="title">updatedate</td>
-				<td><%=subList.updatedate %></td>
+				<td><%=subList.getUpdatedate() %></td>
 			</tr>
 	</table>
 	<div class="button">
@@ -201,7 +201,7 @@
 	%>		
 		<div>
 			<form action="<%=request.getContextPath()%>/board/insertCommentAction.jsp">
-				<input type="hidden" name="boardNo" value="<%=subList.boardNo%>">
+				<input type="hidden" name="boardNo" value="<%=subList.getBoardNo()%>">
 				<input type="hidden" name="memberId" value="<%=loginMemberId%>">
 				<table>
 					<tr>
@@ -232,10 +232,10 @@
 		  for(Comment c : commentList){
 		%>
 			<tr>
-				<td><%=c.commentContent%></td>
-				<td><%=c.memberId%></td>
-				<td><%=c.createdate%></td>
-				<td><%=c.updatedate%></td>
+				<td><%=c.getCommentContent()%></td>
+				<td><%=c.getMemberId()%></td>
+				<td><%=c.getCreatedate()%></td>
+				<td><%=c.getUpdatedate()%></td>
 				<td>
 					<a href="">수정</a>
 				</td>

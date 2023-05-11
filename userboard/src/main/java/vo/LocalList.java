@@ -1,21 +1,14 @@
 package vo;
 
-public class Member {
-	private String memberId;
-	private String memberPw;
+public class LocalList {
+	private String localName;
 	private String createdate;
 	private String updatedate;
-	public String getMemberId() {
-		return memberId;
+	public String getLocalName() {
+		return localName;
 	}
-	public void setMemberId(String memberId) {
-		this.memberId = memberId;
-	}
-	public String getMemberPw() {
-		return memberPw;
-	}
-	public void setMemberPw(String memberPw) {
-		this.memberPw = memberPw;
+	public void setLocalName(String localName) {
+		this.localName = localName;
 	}
 	public String getCreatedate() {
 		return createdate;
@@ -29,5 +22,5 @@ public class Member {
 	public void setUpdatedate(String updatedate) {
 		this.updatedate = updatedate;
 	}
-
 }
+

@@ -27,8 +27,8 @@
 	
 	//요청값 묶어서 저장하기
 	Member paramMember = new Member();
-	paramMember.memberId = insertMemberId;
-	paramMember.memberPw = insertMemberPw;
+	paramMember.setMemberId(insertMemberId);
+	paramMember.setMemberPw(insertMemberPw);
 	
 	System.out.println(insertMemberId + "<-- insertMemberId");
 
@@ -51,14 +51,14 @@
 
 	String sql = "INSERT INTO member(member_id, member_pw, createdate, updatedate) VALUES(?, PASSWORD(?), NOW(), NOW())";
 	stmt = conn.prepareStatement(sql);
-	stmt.setString(1, paramMember.memberId);
-	stmt.setString(2, paramMember.memberPw);
+	stmt.setString(1, paramMember.getMemberId());
+	stmt.setString(2, paramMember.getMemberPw());
 	System.out.println(stmt + "<--stmt");
 
 	// id(기본키)가 중복되는 경우 에러 발생 -> select로 id먼저 비교한 후 중복값은 리다이렉션 시키기
 	String sql2 = "SELECT member_id memberId from member where member_id = ?";
 	stmt2 = conn.prepareStatement(sql2);
-	stmt2.setString(1, paramMember.memberId);
+	stmt2.setString(1, paramMember.getMemberId());
 	System.out.println( stmt2 + " <--insertMemberAction stmt2");
 	rs = stmt2.executeQuery();	
 	//중복된 아이디가 있는경우
