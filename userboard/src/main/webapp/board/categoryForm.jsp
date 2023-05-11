@@ -23,7 +23,7 @@
 	PreparedStatement localStmt = null;
 	ResultSet localRs = null;
 	/* SELECT local_name localName, createdate, updatedate form local; */
-	String localSql="SELECT local_name localName, createdate, updatedate from local;";
+	String localSql="SELECT local_name localName, createdate, updatedate from local order by local_name";
 	localStmt = conn.prepareStatement(localSql);
 	
 	//디버깅
@@ -46,20 +46,47 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+	h2{
+		text-align: center;
+		margin-top: 20px;
+	}
+	table {
+		text-align: center;
+		line-height: 2;
+	}
+	a{
+		text-decoration: none;
+		color: #000000;
+	}
+
+</style>
 </head>
 <body>
+<div class="container">
 <div>
 	<jsp:include page="/inc/mainmenu.jsp"></jsp:include>
 </div>
 <div>
-	<h1>카테고리 목록</h1>
+	<h2><img alt="*" src="<%=request.getContextPath()%>/img/icon.png" style="width: 25px; margin-bottom: 10px; margin-right: 5px;">카테고리 목록</h2>
 </div>
-<a href="<%=request.getContextPath()%>/board/localInsertForm.jsp">카테고리 추가</a>
-<table>
+	<%
+		if(request.getParameter("msg") != null){
+	%>
+		<%=request.getParameter("msg") %>
+	<%		
+		}
+	%> <br>
+<a  class="btn btn-outline-dark" style="float: right; margin-bottom: 20px;" href="<%=request.getContextPath()%>/board/localInsertForm.jsp">카테고리 추가</a>
+<table class="table table-hover">
 	<tr>
-		<th>지역명</th>
-		<th>수정</th>
-		<th>삭제</th>
+		<th style="background-color: #D5D5D5;">지역명</th>
+		<th style="background-color: #D5D5D5;">수정</th>
+		<th style="background-color: #D5D5D5;">삭제</th>
 	</tr>
 		<%
 			for(LocalList l : localList){
@@ -70,12 +97,17 @@
 					<a href="<%=request.getContextPath()%>/board/localUpdateForm.jsp?localName=<%=l.getLocalName()%>">수정</a>
 				</td>
 				<td>
-					<a href="<%=request.getContextPath()%>/board/localDeletAction.jsp?localName=<%=l.getLocalName()%>">삭제</a>
+					<a href="<%=request.getContextPath()%>/board/localDeletForm.jsp?localName=<%=l.getLocalName()%>">삭제</a>
 				</td>
 		</tr>
 		<%		
 			}
 		%>
 </table>
+</div>
+<div class="container" style="margin-top: 80px; margin-bottom: 20px;">
+		<!-- include 페이지 : Copyright &copy; 구디아카데미 -->
+		<jsp:include page="/inc/copyright.jsp"></jsp:include>
+</div>	
 </body>
 </html>

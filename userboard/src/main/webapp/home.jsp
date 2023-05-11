@@ -123,102 +123,54 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
-	<style>
-		.wrap{
-			width: 1280px;
-			margin: 0 auto;
-			background-color: #EAEAEA;
-		}
-		li{
-			list-style: none;
-		}
-		a{
-			text-decoration: none;
-			color:#000000;
-		}
-		.mainmenu{
-			position: absolute;
-		}
-		.submenulist{
-			display: flex;
-			justify-content: space-between;
-			padding-top: 20px;
-			padding-top: 80px;
-			font-size: 18px;
-			line-height: 2;
-		}
-		.submenulistleft h3{
-			font-size: 20px;
-			padding-left: 30px;
-		}
-		.submenulistleft{
-			border: 1px solid #BDBDBD;
-			border-radius: 10px;
-			padding: 10px 25px 10px 10px;
-			margin-left: 70px;
-			background-color: #F6F6F6;
-		}
-		.submenulistright{
-			margin-right: 40px;
-		}
-		.submenulistright table{
-			border-collapse: collapse;
-			border-radius: 10px;
-			background-color: #F6F6F6;
-		}
-		table, th, td {
-		border: 1px solid #BDBDBD;
-		}
-		.sublist table{
-			border-collapse: collapse;
-			margin: 0 auto;
-			margin-top: 20px;
-			width: 1250px;
-			line-height: 2;
-			text-align: center;
-		}
-		.sublist table th{
-			background-color: #FFFFFF;
-		}
-		.cate{
-			background-color: gray;
-			padding: 5px;
-			border-radius: 10px;
-			margin-left: 28px;
-			font-size: 15px;
-		}
-	</style>
+	<!-- Latest compiled and minified CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+	a{
+		text-decoration: none;
+		color: #000000;
+	}
+	.col-sm-3 h3{
+		text-align: center;
+		margin-top: 10px;
+	}
+</style>
+	
 </head>
 <body>
-<div class="wrap">
+<div class="container">
 	<!-- 메인 메뉴(가로) -->
-	<div class="mainmenu">
+	<div>
 		<jsp:include page="/inc/mainmenu.jsp"></jsp:include>
 	</div>
 	
 	<!-- 서브메뉴(세로) subMenuList모델 출력 -->
-	<div class="submenulist">
-		<div class="submenulistleft">
-			<h3>* 카테고리 *</h3>
-			<ul>
+	<div class="row">
+		<div class="col-sm-3">
+			<h3><img alt="*" src="./img/icon.png" style="width: 25px; margin-bottom: 10px; margin-right: 5px;">카테고리</h3>
+			<ul class="list-group">
 				<%
 					for(HashMap<String, Object> m : subMenuList){
 				%>
-						<li>
+						<li class="list-group-item d-flex justify-content-between align-items-center">
 							<a href="<%=request.getContextPath()%>/home.jsp?localName=<%=(String)m.get("localName")%>">
-								<%=(String)m.get("localName")%>(<%=(Integer)m.get("cnt")%>)
+								<%=(String)m.get("localName")%>
 							</a>
+							<span class="badge bg-primary rounded-pill"><%=(Integer)m.get("cnt")%></span>
 						</li>	
 				<%
 					}
 				%>
 			</ul>
-			<a href="<%=request.getContextPath()%>/member/categoryForm.jsp" class="cate">카테고리 관리</a>
+			<a href="<%=request.getContextPath()%>/board/categoryForm.jsp" class="btn btn-outline-secondary  btn-sm" style="margin-top: 10px; float: right;">카테고리 관리</a>
 		</div>
-		<div>
-			<img alt="d" src="./img/trip.jpg" style="width:700px; height: 550px; margin-top: 5px;">
+		<div class="col-sm-6" style="margin-top: 10px;">
+			<img alt="d" src="./img/trip.jpg" style="height: 100%" width="650px;">
 		</div>
-		<div class="submenulistright">
+		<div class="col-sm-3" style="margin-top: 10px;">
 			<!-- home 내용 : 로그인폼/ 카테고리별 게시글 5개씩  -->
 			<!-- 로그인 폼 -->
 			<%
@@ -226,31 +178,43 @@
 					//로그인전이면 로그인폼출력
 			%>
 				<form action="<%=request.getContextPath()%>/member/loginAction.jsp" method="post">
-					<table>
+					<table class="input-group" style="margin-left: 10px;">
 						<tr>
 							<td>아이디</td>
 							<td>
-								<input type="text" name="memberId">
+								<input type="text" name="memberId" class="form-control">
 							</td>
 						</tr>
 						<tr>
 							<td>비밀번호</td>
 							<td>
-								<input type="password" name="memberPw">	
+								<input type="password" name="memberPw" class="form-control" style="margin-top: 10px;">	
 							</td>
 						</tr>
 					</table>
-					<button type="submit">로그인</button>
+					<button type="submit" class="btn btn-dark btn-sm" style="margin-top: 10px; margin-right:10px; float: right; ">로그인</button>
 				</form>
 			<%		
+				}else{
+			%>
+				<table class="table table-dark" style="text-align: center;">
+					<tr>
+						<td>
+							<%=(String)session.getAttribute("loginMemberId")%>님이 접속중입니다.
+						</td>
+					</tr>
+				</table>
+			<%
 				}
 			%>
 		</div>
 	</div>
+	</div>
 	
 	<!-- 카테고리 별 내용 출력 -->
-	<div class="sublist">
-		<table>
+<div class="container">
+	<div>
+		<table class="table table-hover" style="margin-top: 20px; text-align: center;">
 			<tr>
 				<th>localName</th>
 				<th>boardTitle</th>
@@ -280,23 +244,22 @@
 		<%
 			if(currentPage > 1){
 		%>
-				<a href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=currentPage - 1%>&localName=<%=localName%>">이전</a>
+				<a class="btn btn-outline-dark" style="margin-bottom: 10px; float: left;" href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=currentPage - 1%>&localName=<%=localName%>">이전</a>
 		<%		
 			}
 		%>
 		<%
 			if(currentPage < lastPage){
 		%>
-				<a href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=currentPage + 1%>&localName=<%=localName%>">다음</a>
+				<a class="btn btn-outline-dark" style="margin-bottom: 10px; float: right;" href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=currentPage + 1%>&localName=<%=localName%>">다음</a>
 		<%		
 			}
 		%>
 	</div>
-	
-	<div>
+</div>			
+	<div class="container" style="margin-top: 80px; margin-bottom: 20px;">
 		<!-- include 페이지 : Copyright &copy; 구디아카데미 -->
 		<jsp:include page="/inc/copyright.jsp"></jsp:include>
-	</div>
-</div>	
+	</div>	
 </body>
 </html>
