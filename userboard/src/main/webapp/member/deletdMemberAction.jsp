@@ -61,5 +61,5 @@
 	}
 	
 	session.invalidate();
-	response.sendRedirect(request.getContextPath() + "/home.jsp?");
+	response.sendRedirect(request.getContextPath() + "/home.jsp");
 %>
