@@ -273,7 +273,7 @@
 					<td><%=c.getUpdatedate()%></td>			
 			<%
 			//내가 쓴 게시글 만 수정 삭제할 수 있도록 설정
-			if(loginId != null && loginId.equals(subList.getMemberId())){
+			if(loginId != null && loginId.equals((String)session.getAttribute("loginMemberId"))){
 			%>		
 					<td>
 						<a href="<%=request.getContextPath()%>/board/modifyComment.jsp?commentContent=<%=c.getCommentContent()%>&memberId=<%=c.getMemberId() %>&updatedate=<%=c.getUpdatedate()%>&boardNo=<%=c.getBoardNo()%>&commentNo=<%=c.getCommentNo()%>">수정</a>
