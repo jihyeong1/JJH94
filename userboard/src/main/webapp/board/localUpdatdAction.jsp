@@ -17,6 +17,7 @@
 		||request.getParameter("updateLocalName")==null
 		||request.getParameter("updateLocalName").equals("")){
 		response.sendRedirect(request.getContextPath()+"/board/localUpdateForm.jsp");
+		return;
 	}	
 	//변수 저장
 	String localName = request.getParameter("localName");
@@ -51,7 +52,6 @@
 	}
 	//localName을 변경 할 updatd 쿼리문
 	PreparedStatement updateLocalStmt2 = null;
-	ResultSet updateLocalRs2 = null;
 	/* UPDATE local SET local_name= ? WHERE local_name= ? */ 
 	String updateLocalSql2 = "UPDATE local SET local_name= ? WHERE local_name= ?";
 	updateLocalStmt2 = conn.prepareStatement(updateLocalSql2);

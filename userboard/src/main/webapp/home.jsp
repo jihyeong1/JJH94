@@ -58,7 +58,7 @@
 	/* SELECT local_name, board_title, SUBSTRING(board_content, 1, 11) FROM board; */
 	PreparedStatement subMenuBoardStmt = null;
 	ResultSet subMenuBoardRs = null;
-	String subMenuBoard = "SELECT board_no boardNo, local_name localName, board_title boardTitle, SUBSTRING(board_content, 1, 11) boardContent, createdate FROM board";
+	String subMenuBoard = "SELECT board_no boardNo, local_name localName, board_title boardTitle, SUBSTRING(board_content, 1, 11) boardContent, member_id memberId, createdate FROM board";
 	String subMenuAddSql = " WHERE local_name = ?";
 	if(!localName.equals("전체")){
 		subMenuBoard += subMenuAddSql + " LIMIT ?, ?"; //전체 값이 설정되지않았을 때 sql문 합치기
@@ -85,6 +85,7 @@
 		s.setBoardNo(subMenuBoardRs.getInt("boardNo"));
 		s.setLocalName(subMenuBoardRs.getString("localName"));
 		s.setBoardTitle(subMenuBoardRs.getString("boardTitle"));
+		s.setMemberId(subMenuBoardRs.getString("memberId"));
 		s.setBoardContent(subMenuBoardRs.getString("boardContent"));
 		s.setCreatedate(subMenuBoardRs.getString("createdate"));
 		subList.add(s);
@@ -137,6 +138,10 @@
 		text-align: center;
 		margin-top: 10px;
 	}
+	p{
+		margin-top: 20px;
+		color: red;
+	}
 </style>
 	
 </head>
@@ -168,7 +173,7 @@
 			<a href="<%=request.getContextPath()%>/board/categoryForm.jsp" class="btn btn-outline-secondary  btn-sm" style="margin-top: 10px; float: right;">카테고리 관리</a>
 		</div>
 		<div class="col-sm-6" style="margin-top: 10px;">
-			<img alt="d" src="./img/trip.jpg" style="height: 100%" width="650px;">
+			<img alt="d" src="./img/trip.jpg" style="height: 100%" width="100%">
 		</div>
 		<div class="col-sm-3" style="margin-top: 10px;">
 			<!-- home 내용 : 로그인폼/ 카테고리별 게시글 5개씩  -->
@@ -214,11 +219,20 @@
 	<!-- 카테고리 별 내용 출력 -->
 <div class="container">
 	<div>
+		<%
+			if(request.getParameter("msg") !=null){
+		%>
+				<p class="text-center"><%=request.getParameter("msg") %></p>
+		<%		
+			}
+		%>
+		<a class="btn btn-outline-dark" style="float: right; margin-top: 30px; margin-bottom: 20px;" href="<%=request.getContextPath()%>/board/addBoard.jsp">게시글 쓰기</a>
 		<table class="table table-hover" style="margin-top: 20px; text-align: center;">
 			<tr>
-				<th>localName</th>
-				<th>boardTitle</th>
-				<th>boardContent</th>
+				<th>local_Name</th>
+				<th>board_Title</th>
+				<th>board_Content</th>
+				<th>member_Id</th>
 				<th>createdate</th>
 			</tr>
 			<%
@@ -231,7 +245,8 @@
 								<%=s.getBoardTitle() %>
 							</a>
 						</td>
-						<td><%=s.getBoardContent().substring(1, 11) %></td>
+						<td><%=s.getBoardContent() %></td>
+						<td><%=s.getMemberId() %></td>
 						<td><%=s.getCreatedate() %></td>
 					</tr>
 			<%		
@@ -257,9 +272,9 @@
 		%>
 	</div>
 </div>			
-	<div class="container" style="margin-top: 80px; margin-bottom: 20px;">
-		<!-- include 페이지 : Copyright &copy; 구디아카데미 -->
-		<jsp:include page="/inc/copyright.jsp"></jsp:include>
-	</div>	
+<div class="container" style="margin-top: 80px; margin-bottom: 20px;">
+	<!-- include 페이지 : Copyright &copy; 구디아카데미 -->
+	<jsp:include page="/inc/copyright.jsp"></jsp:include>
+</div>	
 </body>
 </html>

@@ -8,6 +8,7 @@
 	if(request.getParameter("boardNo") == null
 		|| request.getParameter("boardNo").equals("")){
 		response.sendRedirect(request.getContextPath()+"/home.jsp");
+		return;
 	
 	}
 	System.out.println(request.getParameter("boardNo") + "<--불러온 boardNo");
@@ -80,6 +81,7 @@
 	
 	//디버깅
 	System.out.println(commentListStmt + "<--commentListStmt");
+	
 	ArrayList<Comment> commentList = new ArrayList<Comment>();
 	while(commentListRs.next()){
 		Comment c = new Comment(); 
@@ -95,9 +97,9 @@
 	//pageCnt 쿼리문
 	PreparedStatement pageCntstmt = null;
 	ResultSet pageCntRs = null;
-	String pageCntsql = "SELECT local_name, count(*) from board WHERE board_no = ?";
+	String pageCntsql = "SELECT count(*) from comment WHERE board_no = ?";
 	pageCntstmt = conn.prepareStatement(pageCntsql);
-	pageCntstmt.setInt(1, boardNo);
+	pageCntstmt.setInt(1,boardNo);
 	pageCntRs = pageCntstmt.executeQuery();
 	if(pageCntRs.next()){
 		totalRow = pageCntRs.getInt("count(*)");
@@ -112,87 +114,110 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<title>Insert title here</title>
-	<style>
-		.wrap{
-			width: 1280px;
-			margin: 0 auto;
-			background-color: #F6F6F6;
-		}
-		table, td {
-			border-bottom: 1px solid #BDBDBD;
-			border-collapse: collapse;
-		}
-		table{
-			width: 800px;
-			height: 400px;
-			margin: 0 auto;
-			text-align: center;
-		}
-		a{
-			text-decoration: none;
-			color: #000000;
-			border: 1px solid #000000;
-		}
-		h1{
-			text-align: center;
-			margin-right: 500px;
-			margin-bottom: 30px;
-			padding-top: 30px;
-		}
-		.title{
-			width: 30%;
-			font-weight: bold;
-		}
-		.button{
-			float: right;
-		}
-	</style>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+	h2{
+		text-align: center;
+		margin-top: 20px;
+		margin-left: 30px;
+		margin-bottom: 30px;
+	}
+	table {
+		text-align: center;	
+	}
+	a{
+		text-decoration: none;
+		color: #000000;
+	}
+	.button{
+		margin-left: 49%;
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+	.comment{
+		margin-top: 50px;
+	}
+	p{
+		color: red;
+	}	
+</style>
 </head>
 <body>
-<div class="wrap">
-<h1>게시글 상세설명</h1>
-	<table>
-			<tr>
-				<td class="title">boardNo</td>
+<div class="container">
+<div>
+	<jsp:include page="/inc/mainmenu.jsp"></jsp:include>
+</div>
+<h2><img alt="*" src="<%=request.getContextPath()%>/img/icon.png" style="width: 25px; margin-bottom: 10px; margin-right: 5px;">게시글 상세설명</h2>
+<form action="<%=request.getContextPath()%>/board/modifyBoard.jsp" method="post">
+	<table class="table table-bordered" style="width: 700px; height: 400px; margin: 0 auto">
+			<tr>			
+				<td style="background-color: #CACACA; font-weight: bold">board_No
+					<input type="hidden" name="boardNo" value="<%=subList.getBoardNo()%>">
+				</td>
 				<td><%=subList.getBoardNo() %></td>
 			</tr>
 			
 			<tr>
-				<td class="title">localName</td>
+				<td style="background-color: #CACACA; font-weight: bold">local_Name
+					<input type="hidden" name="localName" value="<%=subList.getLocalName()%>">
+				</td>
 				<td><%=subList.getLocalName()%></td>
 			</tr>
 			
 			<tr>
-				<td class="title">boardTitle</td>
+				<td style="background-color: #CACACA; font-weight: bold">board_Title
+					<input type="hidden" name="boardTitle" value="<%=subList.getBoardTitle()%>">
+				</td>
 				<td><%=subList.getBoardTitle() %></td>
 			</tr>
 			
 			<tr>
-				<td class="title">boardContent</td>
+				<td style="background-color: #CACACA; font-weight: bold">board_Content
+					<input type="hidden" name="boardContent" value="<%=subList.getBoardContent()%>">
+				</td>
 				<td><%=subList.getBoardContent() %></td>
 			</tr>
 			
 			<tr>
-				<td class="title">memberId</td>
+				<td style="background-color: #CACACA; font-weight: bold">member_Id
+					<input type="hidden" name="memberId" value="<%=subList.getMemberId()%>">
+				</td>
 				<td><%=subList.getMemberId()%></td>
 			</tr>
 			
 			<tr>
-				<td class="title">createdate</td>
+				<td style="background-color: #CACACA; font-weight: bold">createdate
+					<input type="hidden" name="createdate" value="<%=subList.getCreatedate()%>">
+				</td>
 				<td><%=subList.getCreatedate() %></td>
 			</tr>
 			<tr>
-				<td class="title">updatedate</td>
+				<td style="background-color: #CACACA; font-weight: bold">updatedate
+					<input type="hidden" name="updatedate" value="<%=subList.getUpdatedate()%>">
+				</td>
 				<td><%=subList.getUpdatedate() %></td>
 			</tr>
 	</table>
-	<div class="button">
-		<a href = "">수정</a>
-		<a href = "">삭제</a>
-	</div>
+	<%
+		//내가 쓴 게시글 만 수정 삭제할 수 있도록 설정
+		String loginId = (String) session.getAttribute("loginMemberId");
+		if(loginId != null && loginId.equals(subList.getMemberId())){
+	%>
+			<div class="button">
+				<button class="btn btn-outline-dark" type="submit">수정</button>
+				<button class="btn btn-outline-dark" type="submit" formaction="<%=request.getContextPath()%>/board/deletBoard.jsp">삭제</button>
+			</div>
+	<%		
+		}
+	%>
+	</form>
 	<!-- comment 입력 : 세션유무에 따른 분기 -->
+	<hr>
 	<%
 		//로그인 사용자만 댓글 입력 허용
 		if(session.getAttribute("loginMemberId") != null){
@@ -203,55 +228,86 @@
 			<form action="<%=request.getContextPath()%>/board/insertCommentAction.jsp">
 				<input type="hidden" name="boardNo" value="<%=subList.getBoardNo()%>">
 				<input type="hidden" name="memberId" value="<%=loginMemberId%>">
-				<table>
+				<table class="table table-bordered">
 					<tr>
-						<th>commentContent</th>
+						<th>comment_Content</th>
 						<td>
 							<textarea rows="2" cols="80" name="commentContent"></textarea>
 						</td>
-					</tr>
+					</tr>	
+					<div>
+						<button type="submit"  class="btn btn-outline-dark" style=" margin-bottom:10px; margin-right:10px; float: right; ">댓글입력</button>
+					</div>	
 				</table>
-				<button type="submit">댓글입력</button>
 			</form>
 		</div>
 	<%		
 		}
 	%>
+	<hr style="margin-top: 50px;">
 	
 	<!-- comment list 결과셋 -->
-	<table>
-		<tr>
-			<th>commentContent</th>
-			<th>memberId</th>
-			<th>creatdate</th>
-			<th>updatedate</th>
-			<th>수정</th>
-			<th>삭제</th>
-		</tr>
-		<%
-		  for(Comment c : commentList){
-		%>
-			<tr>
-				<td><%=c.getCommentContent()%></td>
-				<td><%=c.getMemberId()%></td>
-				<td><%=c.getCreatedate()%></td>
-				<td><%=c.getUpdatedate()%></td>
-				<td>
-					<a href="">수정</a>
-				</td>
-				<td>
-					<a href="">삭제</a>
-				</td>
+	<form action="<%=request.getContextPath()%>/board/modifyComment.jsp" method="post">
+	<%
+		if(request.getParameter("msg") != null){
+	%>
+			<p class="text-center"><%=request.getParameter("msg") %></p>
+	<%		
+		}
+	%>
+		<table class="table table-bordered">
+			<h2 class="comment"><img alt="*" src="<%=request.getContextPath()%>/img/icon.png" style="width: 25px; margin-bottom: 10px; margin-right: 5px;">댓글창</h2>
+			<tr class="table-dark">
+				<th style="width: 60%">comment_Content</th>
+				<th>member_Id</th>
+				<th>updatedate</th>
+				<th>수정</th>
+				<th>삭제</th>
 			</tr>
-		<%	  
-		  }
-		%>
-	</table>
+			<%
+			  for(Comment c : commentList){
+			%>
+				<tr>
+					<td><%=c.getCommentContent()%></td>
+					<td><%=c.getMemberId()%></td>
+					<td><%=c.getUpdatedate()%></td>			
+			<%
+			//내가 쓴 게시글 만 수정 삭제할 수 있도록 설정
+			if(loginId != null && loginId.equals(subList.getMemberId())){
+			%>		
+					<td>
+						<a href="<%=request.getContextPath()%>/board/modifyComment.jsp?commentContent=<%=c.getCommentContent()%>&memberId=<%=c.getMemberId() %>&updatedate=<%=c.getUpdatedate()%>&boardNo=<%=c.getBoardNo()%>&commentNo=<%=c.getCommentNo()%>">수정</a>
+					</td>
+					<td>
+						<a href="<%=request.getContextPath()%>/board/removeCommentAction.jsp?commentContent=<%=c.getCommentContent()%>&memberId=<%=c.getMemberId() %>&updatedate=<%=c.getUpdatedate()%>&boardNo=<%=c.getBoardNo()%>&commentNo=<%=c.getCommentNo()%>">삭제</a>
+					</td>
+				</tr>
+			<%	  
+			  }}
+			%>
+		</table>
+	</form>
 	
 	<div>
-		<a href="<%=request.getContextPath()%>/board/boardOne.jsp?boardNo=<%=boardNo%>&currentPage=<%=currentPage - 1%>">이전</a>
-		<a href="<%=request.getContextPath()%>/board/boardOne.jsp?boardNo=<%=boardNo%>&currentPage=<%=currentPage + 1%>">다음</a>
+		<%
+			if(currentPage > 1){
+		%>
+				<a class="btn btn-outline-dark" style="margin-bottom: 10px; float: left;" href="<%=request.getContextPath()%>/board/boardOne.jsp?currentPage=<%=currentPage - 1%>&boardNo=<%=boardNo%>">이전</a>
+		<%		
+			}
+		%>
+		<%
+			if(currentPage < lastPage){
+		%>
+				<a class="btn btn-outline-dark" style="margin-bottom: 10px; float: right;" href="<%=request.getContextPath()%>/board/boardOne.jsp?currentPage=<%=currentPage + 1%>&boardNo=<%=boardNo%>">다음</a>
+		<%		
+			}
+		%>
 	</div>
+	<div style="margin-top: 80px; margin-bottom: 20px;">
+	<!-- include 페이지 : Copyright &copy; 구디아카데미 -->
+	<jsp:include page="/inc/copyright.jsp"></jsp:include>
+	</div>	
 </div>	
 </body>
 </html>

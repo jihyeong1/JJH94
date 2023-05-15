@@ -25,9 +25,10 @@
 	table {
 		text-align: center;	
 	}
-	button {
+	.button {
 		margin-top: 20px;
-		margin-left: 650px;
+		margin-bottom: 100px;
+		margin-left: 50%;
 	}
 </style>
 </head>
@@ -45,7 +46,7 @@
 	}
 %>
 <form action="<%=request.getContextPath()%>/member/insertMemberAction.jsp">
-	<table>
+	<table class="table table-bordered" style="width: 400px; margin: 0 auto">
 		<tr>
 			<td>아이디</td>
 			<td>
@@ -59,7 +60,9 @@
 			</td>
 		</tr>
 	</table>
-	<button type="submit">회원가입</button>
+	<div class="button">
+	<button type="submit" class="btn btn-outline-dark">회원가입</button>
+	</div>
 </form>
 <div>
 	<jsp:include page="/inc/copyright.jsp"></jsp:include>
