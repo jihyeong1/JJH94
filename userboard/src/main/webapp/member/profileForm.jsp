@@ -60,9 +60,9 @@
 	table {
 		text-align: center;	
 	}
-	button {
+	.button {
 		margin-top: 20px;
-		margin-left: 650px;
+		margin-left: 44%;
 	}
 </style>
 </head>
@@ -92,10 +92,16 @@
 				<td><%=profile.getCreatedate().substring(0,10) %></td>
 			</tr>
 		</table>
-		<button type="submit" class="btn btn-outline-dark" style="margin-left: 580px;">비밀번호 수정</button>
-		<button type="submit" style="margin-left: 10px;" class="btn btn-outline-dark" formaction="<%=request.getContextPath()%>/member/deletdMemberAction.jsp">회원 탈퇴</button>
+	<div class="button">	
+		<button type="submit" class="btn btn-outline-dark">비밀번호 수정</button>
+		<button type="submit" class="btn btn-outline-dark" formaction="<%=request.getContextPath()%>/member/deletdMemberAction.jsp">회원 탈퇴</button>
+	</div>	
 	</form>
 </div>
 </div>
+<div class="container" style="margin-top: 80px; margin-bottom: 20px;">
+	<!-- include 페이지 : Copyright &copy; 구디아카데미 -->
+	<jsp:include page="/inc/copyright.jsp"></jsp:include>	
+</div>	
 </body>
 </html>

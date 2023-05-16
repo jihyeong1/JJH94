@@ -1,5 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
 //font color
@@ -20,4 +18,3 @@ final String BG_RED = "\u001B[41m";
 System.out.println(RED+"hello"+RESET);
 System.out.println(BG_RED+"hello"+RESET);
 %>
-[출처] 0427) System.out.print() 출력 색상 변경하기 (자바 교실) | 작성자 박성환

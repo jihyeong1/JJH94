@@ -63,7 +63,9 @@
 		text-decoration: none;
 		color: #000000;
 	}
-
+	p{
+		color: red;
+	}	
 </style>
 </head>
 <body>
@@ -77,16 +79,16 @@
 	<%
 		if(request.getParameter("msg") != null){
 	%>
-		<%=request.getParameter("msg") %>
+		<p class="text-center"><%=request.getParameter("msg") %></p>
 	<%		
 		}
 	%> <br>
 <a  class="btn btn-outline-dark" style="float: right; margin-bottom: 20px;" href="<%=request.getContextPath()%>/board/localInsertForm.jsp">카테고리 추가</a>
 <table class="table table-hover">
 	<tr>
-		<th style="background-color: #D5D5D5;">지역명</th>
-		<th style="background-color: #D5D5D5;">수정</th>
-		<th style="background-color: #D5D5D5;">삭제</th>
+		<th style="background-color: #EAEAEA;">지역명</th>
+		<th style="background-color: #EAEAEA;">수정</th>
+		<th style="background-color: #EAEAEA;">삭제</th>
 	</tr>
 		<%
 			for(LocalList l : localList){

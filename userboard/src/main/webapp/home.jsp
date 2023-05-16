@@ -256,26 +256,52 @@
 	</div>
 	<!-- 페이징 설정 -->
 	<div>
-		
-		<%
-			if(currentPage > 1){
-		%>
-				<a class="btn btn-outline-dark" style="margin-bottom: 10px; float: left;" href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=currentPage - 1%>&localName=<%=localName%>">이전</a>
-		<%		
-			}
-		%>
-		<%
-			if(currentPage < lastPage){
-		%>
-				<a class="btn btn-outline-dark" style="margin-bottom: 10px; float: right;" href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=currentPage + 1%>&localName=<%=localName%>">다음</a>
-		<%		
-			}
-		%>
+		<!-- 페이징 -->
+      <ul class="pagination pagination-sm justify-content-center">
+            <li class="page-item"><a class="page-link text-dark" href="<%=request.getContextPath()%>/home.jsp?currentPage=1&localName=<%=localName%>">처음</a></li>
+      <%
+         if(currentPage > 1) {
+      %>
+            <li class="page-item"><a class="page-link text-dark" href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=currentPage-1%>&localName=<%=localName%>">이전</a></li>
+      <%      
+         }
+         if(currentPage > 2) {
+      %>
+            <li class="page-item"><a class="page-link text-dark" href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=currentPage-2%>&localName=<%=localName%>"><%=currentPage-2%></a></li>
+      <%      
+         }
+         if(currentPage > 1) {
+      %>
+            <li class="page-item"><a class="page-link text-dark" href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=currentPage-1%>&localName=<%=localName%>"><%=currentPage-1%></a></li>
+      <%      
+         }
+      %>
+            <li class="page-item"><a class="page-link bg-dark text-light" href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=currentPage%>&localName=<%=localName%>"><%=currentPage%></a></li>
+      <%
+         if(currentPage < lastPage) {
+      %>
+            <li class="page-item"><a class="page-link text-dark" href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=currentPage+1%>&localName=<%=localName%>"><%=currentPage+1%></a></li>
+      <%      
+         }
+         if(currentPage < lastPage-1) {
+      %>
+            <li class="page-item"><a class="page-link text-dark" href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=currentPage+2%>&localName=<%=localName%>"><%=currentPage+2%></a></li>
+      <%      
+         }
+         if(currentPage < lastPage) {
+      %>
+             <li class="page-item"><a class="page-link text-dark" href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=currentPage+1%>&localName=<%=localName%>">다음</a></li>
+      <%      
+         }
+      %> 
+            <li class="page-item"><a class="page-link text-dark" href="<%=request.getContextPath()%>/home.jsp?currentPage=<%=lastPage%>&localName=<%=localName%>">맨끝</a></li>
+      </ul>
+
 	</div>
 </div>			
 <div class="container" style="margin-top: 80px; margin-bottom: 20px;">
 	<!-- include 페이지 : Copyright &copy; 구디아카데미 -->
-	<jsp:include page="/inc/copyright.jsp"></jsp:include>
+	<jsp:include page="/inc/copyright.jsp"></jsp:include>	
 </div>	
 </body>
 </html>

@@ -156,48 +156,48 @@
 <form action="<%=request.getContextPath()%>/board/modifyBoard.jsp" method="post">
 	<table class="table table-bordered" style="width: 700px; height: 400px; margin: 0 auto">
 			<tr>			
-				<td style="background-color: #CACACA; font-weight: bold">board_No
+				<td style="background-color: #EAEAEA; font-weight: bold">board_No
 					<input type="hidden" name="boardNo" value="<%=subList.getBoardNo()%>">
 				</td>
 				<td><%=subList.getBoardNo() %></td>
 			</tr>
 			
 			<tr>
-				<td style="background-color: #CACACA; font-weight: bold">local_Name
+				<td style="background-color: #EAEAEA; font-weight: bold">local_Name
 					<input type="hidden" name="localName" value="<%=subList.getLocalName()%>">
 				</td>
 				<td><%=subList.getLocalName()%></td>
 			</tr>
 			
 			<tr>
-				<td style="background-color: #CACACA; font-weight: bold">board_Title
+				<td style="background-color: #EAEAEA; font-weight: bold">board_Title
 					<input type="hidden" name="boardTitle" value="<%=subList.getBoardTitle()%>">
 				</td>
 				<td><%=subList.getBoardTitle() %></td>
 			</tr>
 			
 			<tr>
-				<td style="background-color: #CACACA; font-weight: bold">board_Content
+				<td style="background-color: #EAEAEA; font-weight: bold">board_Content
 					<input type="hidden" name="boardContent" value="<%=subList.getBoardContent()%>">
 				</td>
 				<td><%=subList.getBoardContent() %></td>
 			</tr>
 			
 			<tr>
-				<td style="background-color: #CACACA; font-weight: bold">member_Id
+				<td style="background-color: #EAEAEA; font-weight: bold">member_Id
 					<input type="hidden" name="memberId" value="<%=subList.getMemberId()%>">
 				</td>
 				<td><%=subList.getMemberId()%></td>
 			</tr>
 			
 			<tr>
-				<td style="background-color: #CACACA; font-weight: bold">createdate
+				<td style="background-color: #EAEAEA; font-weight: bold">createdate
 					<input type="hidden" name="createdate" value="<%=subList.getCreatedate()%>">
 				</td>
 				<td><%=subList.getCreatedate() %></td>
 			</tr>
 			<tr>
-				<td style="background-color: #CACACA; font-weight: bold">updatedate
+				<td style="background-color: #EAEAEA; font-weight: bold">updatedate
 					<input type="hidden" name="updatedate" value="<%=subList.getUpdatedate()%>">
 				</td>
 				<td><%=subList.getUpdatedate() %></td>
