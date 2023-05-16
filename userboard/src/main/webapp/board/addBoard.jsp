@@ -10,6 +10,26 @@
 		return;	
 	}
 
+	//디비 연결하기
+	String driver = "org.mariadb.jdbc.Driver";
+	String dbUrl = "jdbc:mariadb://127.0.0.1:3306/userboard";
+	String dbUser = "root";
+	String dbPw = "java1234";
+	Class.forName(driver);
+	Connection conn = null;
+	conn = DriverManager.getConnection(dbUrl, dbUser, dbPw);
+	
+	//boardNo Max 값 구하기
+	PreparedStatement maxStmt = null;
+	ResultSet maxRs = null;
+	String maxSql = "select max(board_no) max from board";
+	maxStmt = conn.prepareStatement(maxSql);
+	maxRs = maxStmt.executeQuery();
+	int maxCnt = 0;
+	if(maxRs.next()){
+		maxCnt = maxRs.getInt("max");
+	}
+
 %>   
 <!DOCTYPE html>
 <html>
@@ -52,8 +72,16 @@
 	<form action="<%=request.getContextPath()%>/board/addBoardAction.jsp" method="post">
 		<table class="table table-bordered" style="width: 600px; margin: 0 auto">
 			<tr>
+				<td style="background-color: #EAEAEA">board_No</td>
+				<td>
+					
+					<input type="text" name="boardNo" value="<%=maxCnt+1%>" readonly="readonly">
+				</td>
+			</tr>
+			<tr>
 				<td style="background-color: #EAEAEA">local_Name</td>
 				<td>
+					
 					<input type="text" name="localName">
 				</td>
 			</tr>

@@ -61,13 +61,13 @@
 	String subMenuBoard = "SELECT board_no boardNo, local_name localName, board_title boardTitle, SUBSTRING(board_content, 1, 11) boardContent, member_id memberId, createdate FROM board";
 	String subMenuAddSql = " WHERE local_name = ?";
 	if(!localName.equals("전체")){
-		subMenuBoard += subMenuAddSql + " LIMIT ?, ?"; //전체 값이 설정되지않았을 때 sql문 합치기
+		subMenuBoard += subMenuAddSql + " ORDER BY createdate DESC LIMIT ?, ?"; //전체 값이 설정되지않았을 때 sql문 합치기
 		subMenuBoardStmt = conn.prepareStatement(subMenuBoard);
 		subMenuBoardStmt.setString(1, localName);
 		subMenuBoardStmt.setInt(2, startRow);
 		subMenuBoardStmt.setInt(3, rowPerPage);
 	} else {
-		subMenuBoard += " LIMIT ?, ?";
+		subMenuBoard += " ORDER BY createdate DESC LIMIT ?, ?";
 		subMenuBoardStmt = conn.prepareStatement(subMenuBoard);
 		subMenuBoardStmt.setInt(1, startRow);
 		subMenuBoardStmt.setInt(2, rowPerPage);
@@ -256,6 +256,7 @@
 	</div>
 	<!-- 페이징 설정 -->
 	<div>
+		
 		<%
 			if(currentPage > 1){
 		%>
