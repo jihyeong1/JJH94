@@ -11,7 +11,7 @@
  	if(request.getParameter("currentPage") != null){
  		currentPage = Integer.parseInt(request.getParameter("currentPage"));
  	}
- 	System.out.println(currentPage + "<--currentPage값");
+ 	System.out.println(currentPage + "<--currentPage값"); 
  	
  	//출력 행 설정
  	int rowPerPage = 10;
