@@ -15,7 +15,7 @@
  	
  	//출력 행 설정
  	int rowPerPage = 10;
- 	int startRow = (currentPage - 1) * rowPerPage;
+ 	int startRow = (currentPage - 1) * rowPerPage; 
  	
  	int totalRow = 0;
  	
